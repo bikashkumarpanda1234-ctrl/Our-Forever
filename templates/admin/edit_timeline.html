@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Journey Event - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin.timeline') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Journey Milestones
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Edit Journey Event 🕰️</h2>
+        
+        <form method="POST">
+            <!-- DATE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Event Date</label>
+            <input type="text" name="date" value="{{ event.date }}" placeholder="YYYY-MM-DD" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Event Title</label>
+            <input type="text" name="title" value="{{ event.title }}" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- DESCRIPTION -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Description</label>
+            <textarea name="description" rows="5" style="width: 100%; padding: 12px; margin-bottom: 30px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical;">{{ event.description or "" }}</textarea>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Update Event
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

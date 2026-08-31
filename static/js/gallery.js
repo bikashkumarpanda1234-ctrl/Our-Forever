@@ -1,0 +1,1 @@
+document.addEventListener('click',e=>{const img=e.target.closest('.gallery-img');if(img)window.open(img.src,'_blank')});

@@ -1,0 +1,1 @@
+const audio=document.querySelector('audio'); const btn=document.querySelector('#musicToggle'); if(btn&&audio){btn.onclick=()=>audio.paused?audio.play():audio.pause()}

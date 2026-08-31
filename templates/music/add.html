@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Add Song - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('music.music') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Playlist
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Add a Song 🎵</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-size: 14px; color: var(--deep-soft);">
+            Build your shared love soundtrack. Upload song files directly from your phone.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- SONG TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Song Title</label>
+            <input type="text" name="title" placeholder="Perfect / Lover / Dil Ko Karaar Aaya ❤️" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- ARTIST -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Artist</label>
+            <input type="text" name="artist" placeholder="Ed Sheeran / Taylor Swift / Yasser Desai" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;">
+
+            <!-- AUDIO FILE INPUT -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Audio File</label>
+            <input type="file" name="song" accept="audio/*" style="width: 100%; padding: 10px; margin-bottom: 20px; box-sizing: border-box;" required>
+            <small style="display: block; color: var(--rose); margin-top: -15px; margin-bottom: 20px;">
+                Supported audio formats: mp3, wav, ogg, m4a. Max 50MB.
+            </small>
+
+            <!-- COVER FILE INPUT -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Optional Cover Image</label>
+            <input type="file" name="cover" accept="image/*" style="width: 100%; padding: 10px; margin-bottom: 30px; box-sizing: border-box;">
+
+            <!-- PRIVATE CHECKBOX -->
+            <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                <input type="checkbox" name="is_private" id="is-private" style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;" {% if request.args.get('private') == 'true' %}checked{% endif %}>
+                <label for="is-private" style="cursor: pointer; font-weight: 500; color: var(--deep);">
+                    🔒 Save to Private section
+                </label>
+            </div>
+
+            <!-- BACKGROUND MUSIC CHECKBOX -->
+            <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                <input type="checkbox" name="is_background" id="is-background" style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;">
+                <label for="is-background" style="cursor: pointer; font-weight: 500; color: var(--deep);">
+                    🌸 Use as Background Music
+                </label>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Add to Soundtrack
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Letters - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .letters-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .letters-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .letters-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        color: #5a3040;
+        margin-bottom: 10px;
+    }
+    .letters-list {
+        display: flex;
+        flex-direction: column;
+        gap: 35px;
+    }
+    .letter-card {
+        background: #fffdfd;
+        border-radius: 24px;
+        padding: 35px;
+        box-shadow: var(--shadow-small);
+        border: 1px solid rgba(255, 182, 193, 0.35);
+        position: relative;
+        overflow: hidden;
+    }
+    .letter-card::before {
+        content: "💌";
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        font-size: 40px;
+        opacity: 0.15;
+    }
+    .letter-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 28px;
+        color: #5a3040;
+        margin: 0 0 5px;
+        font-weight: 700;
+    }
+    .letter-date {
+        font-size: 13px;
+        color: var(--rose);
+        margin-bottom: 20px;
+        font-weight: 600;
+        display: block;
+    }
+    .letter-body {
+        color: #5a3040;
+        font-size: 15px;
+        line-height: 1.8;
+        white-space: pre-line;
+        margin-bottom: 20px;
+    }
+    .letter-image-wrapper {
+        margin-top: 20px;
+        border-radius: 16px;
+        overflow: hidden;
+        max-height: 400px;
+        background: #faf8f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .letter-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        max-height: 400px;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 24px;
+        border: 1px dashed rgba(255, 182, 193, 0.6);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="letters-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="letters-header">
+        <h1>💌 Our Private Letters</h1>
+        <p style="color: var(--deep-soft); font-size: 14px;">Handwritten thoughts and feelings, saved only for us. ❤️</p>
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('letters.add_letter', private='true') }}" class="btn">
+                + Write Private Letter
+            </a>
+        </div>
+    </div>
+
+    {% if letters %}
+    <div class="letters-list">
+        {% for l in letters %}
+        <article class="letter-card fade-up" style="animation-delay: {{ loop.index0 * 0.05 }}s; opacity: 0;">
+            <h2 class="letter-title">{{ l.title }}</h2>
+            <span class="letter-date">Written: {{ l.created_at.strftime('%B %d, %Y') if l.created_at else "A Special Day" }}</span>
+            <div class="letter-body">{{ l.body }}</div>
+            {% if l.image %}
+            <div class="letter-image-wrapper">
+                <img src="/media/photos/{% if l.is_private %}private{% else %}public{% endif %}/{{ l.image }}" alt="{{ l.title }}">
+            </div>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 50px; margin-bottom: 15px;">💌</div>
+        <h3 style="color: #5a3040; font-size: 20px; margin-bottom: 8px;">No secret letters yet...</h3>
+        <p style="color: #8c586c; font-size: 13px; margin-bottom: 20px;">Write a sweet note or upload a handwritten letter picture!</p>
+        <a href="{{ url_for('letters.add_letter', private='true') }}" class="btn">Write Secret Letter</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

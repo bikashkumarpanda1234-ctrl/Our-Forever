@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Add Journey Event - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('timeline.timeline') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Journey
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Add Journey Event 🕰️</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-size: 14px; color: var(--deep-soft);">
+            Add a milestone, first date, or special memory to our timeline.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- DATE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Event Date</label>
+            <input type="text" name="date" placeholder="E.g. 14 February 2025 / The beginning" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Event Title</label>
+            <input type="text" name="title" placeholder="Our First Valentine / Day We Met ❤️" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- DESCRIPTION -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Description</label>
+            <textarea name="description" placeholder="Write something about this beautiful memory..." rows="4" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical;"></textarea>
+
+            <!-- OPTIONAL PHOTO -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Optional Photo</label>
+            <input type="file" name="photo" accept="image/*" style="width: 100%; padding: 10px; margin-bottom: 30px; box-sizing: border-box;">
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Save Journey Event
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

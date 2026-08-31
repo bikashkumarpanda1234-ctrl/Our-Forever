@@ -1,0 +1,1 @@
+const el=document.querySelector('[data-start]');if(el){const start=new Date(el.dataset.start);setInterval(()=>{const d=Math.max(0,Date.now()-start);el.textContent=Math.floor(d/86400000)+' days of us ❤️'},1000)}

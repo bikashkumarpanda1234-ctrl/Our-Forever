@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff0f5"/>
+      <stop offset="50%" stop-color="#ffd8e2"/>
+      <stop offset="100%" stop-color="#ffb6c1"/>
+    </linearGradient>
+    <linearGradient id="homeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#fff0f3"/>
+    </linearGradient>
+    <linearGradient id="roofGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0567b"/>
+      <stop offset="100%" stop-color="#b82e54"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe082"/>
+      <stop offset="100%" stop-color="#ffb300"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="800" height="500" fill="url(#sky)"/>
+
+  <!-- Soft Rays -->
+  <circle cx="400" cy="180" r="280" fill="rgba(255, 255, 255, 0.4)" filter="url(#glow)"/>
+  <circle cx="400" cy="180" r="180" fill="rgba(255, 220, 230, 0.5)"/>
+
+  <!-- Laxmi Mandir Temple Spire Silhouette in Background -->
+  <path d="M 180 320 L 220 180 L 260 320 Z" fill="url(#goldGrad)" opacity="0.8"/>
+  <path d="M 220 150 L 220 180" stroke="#ffb300" stroke-width="4"/>
+  <polygon points="220,140 235,148 220,156" fill="#e0567b"/>
+  <text x="220" y="340" font-family="'Poppins', sans-serif" font-size="14" fill="#b82e54" font-weight="bold" text-anchor="middle">🛕 Laxmi Mandir</text>
+
+  <!-- Sweet Home Cottage -->
+  <!-- Main House Body -->
+  <rect x="330" y="240" width="240" height="150" rx="12" fill="url(#homeGrad)" stroke="#e0567b" stroke-width="3" filter="url(#glow)"/>
+  
+  <!-- Roof -->
+  <path d="M 310 245 L 450 140 L 590 245 Z" fill="url(#roofGrad)"/>
+  
+  <!-- Door -->
+  <path d="M 420 310 Q 450 280 480 310 L 480 390 L 420 390 Z" fill="#b82e54"/>
+  <circle cx="470" cy="350" r="4" fill="#ffe082"/>
+
+  <!-- Windows -->
+  <rect x="360" y="270" width="40" height="45" rx="6" fill="#ffe4eb" stroke="#e0567b" stroke-width="2"/>
+  <line x1="380" y1="270" x2="380" y2="315" stroke="#e0567b" stroke-width="2"/>
+  <line x1="360" y1="292" x2="400" y2="292" stroke="#e0567b" stroke-width="2"/>
+
+  <rect x="500" y="270" width="40" height="45" rx="6" fill="#ffe4eb" stroke="#e0567b" stroke-width="2"/>
+  <line x1="520" y1="270" x2="520" y2="315" stroke="#e0567b" stroke-width="2"/>
+  <line x1="500" y1="292" x2="540" y2="292" stroke="#e0567b" stroke-width="2"/>
+
+  <!-- Floating Glowing Hearts -->
+  <text x="450" y="125" font-size="38" filter="url(#glow)">💖</text>
+  <text x="310" y="200" font-size="28">✨</text>
+  <text x="570" y="190" font-size="28">🌸</text>
+  <text x="260" y="260" font-size="24">🌺</text>
+  <text x="620" y="270" font-size="24">🌹</text>
+
+  <!-- Banner Text -->
+  <rect x="180" y="415" width="440" height="55" rx="28" fill="rgba(255, 255, 255, 0.92)" stroke="#e0567b" stroke-width="2" filter="url(#glow)"/>
+  <text x="400" y="442" font-family="'Georgia', serif" font-size="20" fill="#7a203b" font-weight="bold" text-anchor="middle">
+    🏡 Her Sweet Home • Jajpur Town
+  </text>
+  <text x="400" y="460" font-family="'Poppins', sans-serif" font-size="12" fill="#b82e54" text-anchor="middle">
+    Bidyadharpur, Prustysahi (Near Laxmi Mandir)
+  </text>
+</svg>

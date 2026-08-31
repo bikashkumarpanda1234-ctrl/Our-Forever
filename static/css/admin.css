@@ -1,0 +1,1 @@
+.admin-links{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.admin-links a{padding:25px;background:white;border-radius:20px;text-decoration:none;color:#5a3040}@media(max-width:700px){.admin-links{grid-template-columns:1fr}}

@@ -1,0 +1,511 @@
+/* =========================================================
+   PRIVATE PAGE
+========================================================= */
+
+.private-page {
+    width: 100%;
+    min-height: 100vh;
+    padding: 80px 5% 100px;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   PRIVATE HEADER
+========================================================= */
+
+.private-header {
+    max-width: 850px;
+    margin: 0 auto 70px;
+    text-align: center;
+}
+
+.private-heart {
+    display: block;
+    font-size: 48px;
+    margin-bottom: 15px;
+    animation: privateHeartbeat 2s infinite;
+}
+
+.private-header h1 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(45px, 7vw, 78px);
+    margin: 10px 0 20px;
+}
+
+.private-intro {
+    max-width: 650px;
+    margin: auto;
+    font-size: 17px;
+    line-height: 1.9;
+    opacity: .75;
+}
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+.private-upload-area {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 70px;
+}
+
+.private-upload-form {
+    text-align: center;
+}
+
+.private-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.private-upload-form input,
+.private-upload-form textarea {
+    display: block;
+    width: min(500px, 90vw);
+    margin: 15px auto;
+    padding: 15px 17px;
+    border: 1px solid #efc8d3;
+    border-radius: 15px;
+    outline: none;
+    font-family: Poppins, sans-serif;
+    background: white;
+}
+
+.private-upload-form textarea {
+    resize: vertical;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 42px;
+    margin: 0;
+}
+
+
+/* =========================================================
+   SHAYARI
+========================================================= */
+
+.shayari-section {
+    max-width: 1200px;
+    margin: 0 auto 100px;
+}
+
+.shayari-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.shayari-card {
+    position: relative;
+    padding: 35px;
+    border-radius: 25px;
+    background: rgba(255,255,255,.8);
+    border: 1px solid rgba(220,150,170,.2);
+    box-shadow: 0 15px 45px rgba(90,35,55,.09);
+    transition: .4s ease;
+}
+
+.shayari-card:hover {
+    transform: translateY(-7px);
+}
+
+.quote-mark {
+    font-family: Georgia, serif;
+    font-size: 55px;
+}
+
+.shayari-card p {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 21px;
+    line-height: 1.7;
+    font-style: italic;
+}
+
+.shayari-heart {
+    display: block;
+    margin-top: 15px;
+}
+
+
+/* =========================================================
+   PRIVATE MEMORIES
+========================================================= */
+
+.private-memories {
+    max-width: 1200px;
+    margin: 0 auto 100px;
+}
+
+.private-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.private-card {
+    overflow: hidden;
+    background: rgba(255,255,255,.85);
+    border-radius: 23px;
+    box-shadow: 0 15px 45px rgba(90,35,55,.1);
+    transition: .4s ease;
+}
+
+.private-card:hover {
+    transform: translateY(-8px);
+}
+
+.private-photo {
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
+.private-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: .6s ease;
+}
+
+.private-card:hover img {
+    transform: scale(1.06);
+}
+
+.photo-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(90,35,55,.2);
+    opacity: 0;
+    transition: .4s;
+}
+
+.private-card:hover .photo-overlay {
+    opacity: 1;
+}
+
+.photo-overlay span {
+    font-size: 40px;
+}
+
+.private-card-content {
+    padding: 20px;
+}
+
+.private-card-content h3 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 25px;
+    margin: 0 0 8px;
+}
+
+.private-card-content p {
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: .7;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-private {
+    text-align: center;
+    padding: 70px 25px;
+    border-radius: 28px;
+    background: rgba(255,255,255,.7);
+}
+
+.empty-heart {
+    font-size: 60px;
+    animation: privateHeartbeat 2s infinite;
+}
+
+.empty-private h3 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+}
+
+
+/* =========================================================
+   FINAL MESSAGE
+========================================================= */
+
+.private-message {
+    max-width: 850px;
+    margin: auto;
+    padding: 65px 30px;
+    text-align: center;
+    border-radius: 35px;
+    background: rgba(255,255,255,.75);
+    box-shadow: 0 20px 70px rgba(90,35,55,.1);
+}
+
+.private-message h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(32px, 5vw, 48px);
+}
+
+.private-message p {
+    line-height: 1.9;
+    opacity: .75;
+}
+
+.message-signature {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 27px;
+}
+
+
+/* =========================================================
+   LOCK BUTTON
+========================================================= */
+
+.private-actions {
+    text-align: center;
+    margin-top: 35px;
+}
+
+
+/* =========================================================
+   UNLOCK PAGE
+========================================================= */
+
+.private-unlock-page {
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 14% 17%, rgba(255, 213, 224, .78), transparent 25%),
+        radial-gradient(circle at 86% 82%, rgba(245, 198, 210, .64), transparent 31%);
+}
+
+.private-unlock-page::before,
+.private-unlock-page::after {
+    position: absolute;
+    z-index: -1;
+    color: rgba(183, 61, 102, .12);
+    font-family: Georgia, serif;
+    line-height: 1;
+    content: "♥";
+    pointer-events: none;
+    animation: secretFloat 7s ease-in-out infinite;
+}
+
+.private-unlock-page::before {
+    top: 9%;
+    left: 8%;
+    font-size: clamp(92px, 16vw, 175px);
+    transform: rotate(-12deg);
+}
+
+.private-unlock-page::after {
+    right: 9%;
+    bottom: 7%;
+    font-size: clamp(74px, 13vw, 150px);
+    animation-delay: -3s;
+    transform: rotate(12deg);
+}
+
+.lockbox {
+    width: min(460px, 100%);
+    padding: 45px;
+    text-align: center;
+    background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(255,248,250,.88));
+    border: 1px solid rgba(255,255,255,.95);
+    border-radius: 34px;
+    box-shadow: 0 28px 80px rgba(115, 44, 70, .16), inset 0 1px 0 rgba(255,255,255,.9);
+    position: relative;
+    animation: secretReveal .7s ease-out both;
+}
+
+.lockbox::before {
+    content: "our little forever";
+    display: block;
+    margin-bottom: 14px;
+    color: var(--rose);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+}
+
+.lock-icon {
+    width: 76px;
+    height: 76px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 18px;
+    font-size: 38px;
+    background: linear-gradient(145deg, #fff7f9, #f8d6e1);
+    border: 1px solid rgba(200, 90, 120, .16);
+    border-radius: 50%;
+    box-shadow: 0 10px 24px rgba(173, 68, 99, .16);
+}
+
+.lockbox h1 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 45px;
+    margin: 8px 0 12px;
+    letter-spacing: -.02em;
+}
+
+.unlock-text {
+    line-height: 1.8;
+    opacity: .7;
+}
+
+.lockbox input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    margin: 15px 0;
+    border: 1px solid rgba(200, 90, 120, .25);
+    border-radius: 16px;
+    outline: none;
+    font-size: 15px;
+    background: rgba(255,255,255,.9);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.lockbox input:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 4px rgba(200, 90, 120, .11);
+}
+
+.private-enter-btn {
+    width: 100%;
+    min-height: 52px;
+    box-shadow: 0 10px 22px rgba(185, 64, 100, .22);
+}
+
+.private-error {
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 12px;
+    background: rgba(190,60,80,.08);
+}
+
+.unlock-bottom {
+    margin-top: 25px;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 20px;
+    color: var(--deep-soft);
+    opacity: .72;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes privateHeartbeat {
+    0%,100% {
+        transform: scale(1);
+    }
+
+    15% {
+        transform: scale(1.12);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes secretFloat {
+    0%, 100% { margin-top: 0; }
+    50% { margin-top: -18px; }
+}
+
+@keyframes secretReveal {
+    from { opacity: 0; transform: translateY(18px) scale(.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .private-unlock-page::before,
+    .private-unlock-page::after,
+    .lockbox { animation: none; }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .private-page {
+        padding: 60px 20px 80px;
+    }
+
+    .shayari-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .private-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .private-photo {
+        height: 210px;
+    }
+
+    .lockbox {
+        padding: 35px 25px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .private-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .private-photo {
+        height: 240px;
+    }
+
+    .section-title h2 {
+        font-size: 32px;
+    }
+
+}

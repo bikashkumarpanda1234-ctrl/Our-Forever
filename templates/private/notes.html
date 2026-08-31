@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Our Love Notes - Secret Place 🔐{% endblock %}
+
+{% block extra_css %}
+<style>
+    .notes-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .notes-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .notes-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        color: #5a3040;
+        margin-bottom: 10px;
+    }
+    
+    /* STICKY WALL GRID */
+    .sticky-wall {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 30px;
+        margin-top: 45px;
+    }
+
+    /* INDIVIDUAL POST-IT STICKY NOTE */
+    .sticky-note {
+        position: relative;
+        padding: 30px 25px 25px;
+        min-height: 230px;
+        border-radius: 4px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+    }
+    .sticky-note:hover {
+        transform: scale(1.03) rotate(-1deg);
+        box-shadow: 0 15px 35px rgba(90, 35, 55, 0.15);
+        z-index: 5;
+    }
+    
+    /* Pin decoration at the top */
+    .sticky-note::before {
+        content: "📌";
+        position: absolute;
+        top: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        opacity: 0.85;
+    }
+
+    /* Color variations */
+    .note-pink {
+        background: #ffd3df;
+        border-left: 5px solid #ff9ebb;
+    }
+    .note-yellow {
+        background: #fff3c3;
+        border-left: 5px solid #fbd850;
+    }
+    .note-blue {
+        background: #cbf0f8;
+        border-left: 5px solid #8be0ef;
+    }
+    .note-green {
+        background: #d4f7d4;
+        border-left: 5px solid #9ae29a;
+    }
+
+    .note-body {
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 21px;
+        line-height: 1.5;
+        color: #4a2c37;
+        font-style: italic;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .note-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        font-size: 11px;
+        color: rgba(90, 50, 65, 0.7);
+        border-top: 1px dashed rgba(90, 50, 65, 0.15);
+        padding-top: 10px;
+    }
+
+    /* STICKY CREATOR FORM */
+    .note-creator {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 182, 193, 0.4);
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: var(--shadow-small);
+        max-width: 600px;
+        margin: 0 auto 50px;
+    }
+
+    /* Color selector buttons */
+    .color-picker {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        justify-content: center;
+    }
+    .color-option {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .color-option:hover {
+        transform: scale(1.15);
+    }
+    .color-option.selected {
+        border-color: #5a3040;
+        transform: scale(1.1);
+    }
+    
+    .delete-note-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 0;
+        color: rgba(90, 50, 65, 0.6);
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .delete-note-btn:hover {
+        color: #ff3366;
+        transform: scale(1.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="notes-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="notes-header">
+        <h1>💌 Our Sticky Love Notes</h1>
+        <p style="color: var(--deep-soft); font-size: 14px;">Leave a sweet morning wish, a romantic quote, or a quick reminder for each other. 📌</p>
+    </div>
+
+    <!-- CREATE LOVE NOTE -->
+    <div class="note-creator fade-up">
+        <h3 style="margin-top: 0; margin-bottom: 20px; text-align: center; color: #5a3040; font-weight: 600;">📌 Leave a New Note</h3>
+        <form action="{{ url_for('private.add_note') }}" method="POST">
+            <textarea name="body" placeholder="Write your sweet note here..." rows="3" style="width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #efc8d3; resize: none; margin-bottom: 20px; font-family: inherit; font-size: 14px; box-sizing: border-box;" required></textarea>
+            
+            <div style="text-align: center; margin-bottom: 10px; font-size: 13px; color: var(--deep-soft); font-weight: 500;">Select Note Color</div>
+            <!-- Color Option Indicators -->
+            <div class="color-picker">
+                <div class="color-option note-pink selected" data-color="note-pink" style="background: #ffd3df;"></div>
+                <div class="color-option note-yellow" data-color="note-yellow" style="background: #fff3c3;"></div>
+                <div class="color-option note-blue" data-color="note-blue" style="background: #cbf0f8;"></div>
+                <div class="color-option note-green" data-color="note-green" style="background: #d4f7d4;"></div>
+            </div>
+            
+            <!-- Hidden Input for selected color -->
+            <input type="hidden" name="color" id="selected-color" value="note-pink">
+
+            <button type="submit" class="btn" style="width: 100%; padding: 12px;">
+                💌 Post Note to Wall
+            </button>
+        </form>
+    </div>
+
+    <!-- STICKY WALL LISTINGS -->
+    {% if notes %}
+    <div class="sticky-wall">
+        {% for n in notes %}
+        <article class="sticky-note {{ n.color }} fade-up" style="animation-delay: {{ loop.index0 * 0.05 }}s; opacity: 0;">
+            <div class="note-body">{{ n.body }}</div>
+            <div class="note-footer">
+                <span>📅 {{ n.created_at.strftime('%d %b, %H:%M') if n.created_at else "Today" }}</span>
+                <form action="{{ url_for('private.delete_note', note_id=n.id) }}" method="POST" style="margin: 0; display: inline;">
+                    <button type="submit" class="delete-note-btn" onclick="return confirm('Do you want to remove this love note? 🗑️')">
+                        🗑️
+                    </button>
+                </form>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty" style="background: rgba(255, 255, 255, 0.6); padding: 50px 20px; border-radius: 24px; border: 1px dashed rgba(255, 182, 193, 0.6); text-align: center;">
+        <div style="font-size: 50px; margin-bottom: 15px;">📌</div>
+        <h3 style="color: #5a3040; margin-bottom: 8px;">The wall is empty...</h3>
+        <p style="color: #8c586c; font-size: 13.5px;">Write the first sticky note above and post it on the wall!</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const colorOptions = document.querySelectorAll(".color-option");
+        const hiddenInput = document.getElementById("selected-color");
+
+        colorOptions.forEach(opt => {
+            opt.addEventListener("click", function() {
+                // Remove selected class from others
+                colorOptions.forEach(o => o.classList.remove("selected"));
+                // Add selected class to clicked
+                this.classList.add("selected");
+                // Update hidden input value
+                hiddenInput.value = this.getAttribute("data-color");
+            });
+        });
+    });
+</script>
+{% endblock %}

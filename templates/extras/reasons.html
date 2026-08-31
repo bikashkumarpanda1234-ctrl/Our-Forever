@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Reasons Why I Love You - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; text-align: center; padding: 40px 20px;">
+    <div class="section-title">
+        <div class="eyebrow">FROM MY HEART</div>
+        <h2>Reasons Why I Love You 💖</h2>
+        <p style="color: var(--deep-soft); font-size: 15px;">Tap any card to flip and reveal a special reason why you mean the world to me. ✨</p>
+    </div>
+
+    <!-- RANDOM REASON BANNER -->
+    <div class="card" style="margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,235,240,0.9)); border-radius: 24px; border: 1px solid rgba(255,182,193,0.5); box-shadow: 0 10px 30px rgba(90,35,55,0.08);">
+        <div style="font-size: 35px; margin-bottom: 10px;">💌</div>
+        <h3 style="color: var(--deep); font-size: 22px; margin-bottom: 10px;">Daily Love Note</h3>
+        <p id="randomReasonText" style="font-size: 20px; font-weight: 600; color: var(--rose); font-style: italic; min-height: 50px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            "Click below to generate a romantic reason!"
+        </p>
+        <button id="generateBtn" class="btn" style="padding: 10px 28px; font-size: 14px;">
+            ✨ Show Me A Reason
+        </button>
+    </div>
+
+    <!-- ADD REASON FORM (Logged in) -->
+    {% if session.get('logged_in') %}
+    <div style="margin-bottom: 30px; text-align: right;">
+        <button onclick="document.getElementById('addReasonForm').style.display='block'" class="btn alt" style="font-size: 13px;">
+            + Add New Reason
+        </button>
+    </div>
+    <div id="addReasonForm" style="display: none; margin-bottom: 35px;" class="card">
+        <form action="{{ url_for('extras.add_reason') }}" method="POST" style="text-align: left;">
+            <label style="font-weight: 600; color: var(--deep); display: block; margin-bottom: 8px;">Add Reason Why You Love Her/Him:</label>
+            <input type="text" name="text" placeholder="e.g. The way your eyes light up when you smile..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #efc8d3; margin-bottom: 15px; box-sizing: border-box;" required>
+            <button type="submit" class="btn" style="padding: 10px 20px; font-size: 13px;">Save Reason ❤️</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- REASONS CARDS GRID -->
+    {% if reasons %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px;">
+        {% for r in reasons %}
+        <div class="flip-card" onclick="this.classList.toggle('flipped')" style="height: 170px; cursor: pointer; perspective: 1000px;">
+            <div class="flip-card-inner" style="position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; border-radius: 20px; box-shadow: var(--shadow-small);">
+                <!-- FRONT -->
+                <div class="flip-card-front" style="position: absolute; inset: 0; background: white; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--rose-light); backface-visibility: hidden; padding: 20px;">
+                    <div style="font-size: 35px; color: var(--rose);">❤️</div>
+                    <span style="font-size: 14px; font-weight: 600; color: var(--deep); margin-top: 10px;">Reason #{{ loop.index }}</span>
+                    <small style="color: var(--deep-soft); font-size: 11px; margin-top: 4px;">Tap to reveal</small>
+                </div>
+                <!-- BACK -->
+                <div class="flip-card-back" style="position: absolute; inset: 0; background: linear-gradient(135deg, #ff8fa3, #ff4d6d); color: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; transform: rotateY(180deg); backface-visibility: hidden; font-size: 15px; font-weight: 500; text-align: center; box-shadow: var(--shadow);">
+                    "{{ r.text }}"
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty">
+        <p>No reasons added yet. Admin can post special reasons! ❤️</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const reasonsData = [
+        {% for r in reasons %}
+        "{{ r.text|replace('"', '\\"') }}",
+        {% endfor %}
+    ];
+
+    const generateBtn = document.getElementById("generateBtn");
+    const randomReasonText = document.getElementById("randomReasonText");
+
+    if (reasonsData.length > 0) {
+        generateBtn.addEventListener("click", function() {
+            const randomIndex = Math.floor(Math.random() * reasonsData.length);
+            randomReasonText.style.opacity = "0";
+            setTimeout(function() {
+                randomReasonText.textContent = '"' + reasonsData[randomIndex] + '"';
+                randomReasonText.style.opacity = "1";
+            }, 200);
+        });
+        // Set initial random
+        randomReasonText.textContent = '"' + reasonsData[Math.floor(Math.random() * reasonsData.length)] + '"';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Gifts - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gifts-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .gifts-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .gifts-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        color: #5a3040;
+        margin-bottom: 10px;
+    }
+    .gifts-split {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 40px;
+    }
+    .gifts-col-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #5a3040;
+        margin-bottom: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-bottom: 2px solid rgba(255, 182, 193, 0.4);
+        padding-bottom: 10px;
+    }
+    .gift-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: var(--shadow-small);
+        border: 1px solid rgba(255, 182, 193, 0.3);
+        margin-bottom: 25px;
+    }
+    .gift-img-wrapper {
+        width: 100%;
+        height: 220px;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #faf8f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    .gift-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        max-height: 220px;
+    }
+    .gift-meta {
+        font-size: 13px;
+        color: var(--rose);
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .gift-note {
+        font-size: 13px;
+        background: rgba(255, 245, 247, 0.8);
+        border-left: 3px solid var(--rose);
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 12px;
+        color: #5a3040;
+        font-style: italic;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 40px 15px;
+        color: #8c586c;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="gifts-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="gifts-header">
+        <h1>🎁 Our Private Gifts</h1>
+        <p style="color: var(--deep-soft); font-size: 14px;">Memories of special exchanges kept only between us. 🧸</p>
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('gifts.add_gift', private='true') }}" class="btn">
+                + Add Private Gift
+            </a>
+        </div>
+    </div>
+
+    <div class="gifts-split">
+        <!-- SHE GAVE ME -->
+        <div>
+            <h2 class="gifts-col-title"><span>💝</span> Gifts She Gave Me</h2>
+            {% if she_gifts %}
+                {% for g in she_gifts %}
+                <article class="gift-card">
+                    <div class="gift-img-wrapper">
+                        <img src="/media/photos/public/{{ g.image }}" alt="{{ g.title }}">
+                    </div>
+                    <span class="gift-meta">Received: {{ g.date or "A Special Day" }}</span>
+                    <h3 style="font-size: 19px; color: #5a3040; margin: 0 0 8px; font-weight: 600;">{{ g.title }}</h3>
+                    <p style="color: #8c586c; font-size: 13.5px; line-height: 1.5; margin: 0;">{{ g.description or "" }}</p>
+                    {% if g.note %}
+                    <div class="gift-note">
+                        <strong>Love Note:</strong> "{{ g.note }}"
+                    </div>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">No private gifts recorded from her yet...</div>
+            {% endif %}
+        </div>
+
+        <!-- I GAVE HER -->
+        <div>
+            <h2 class="gifts-col-title"><span>🎁</span> Gifts I Gave Her</h2>
+            {% if he_gifts %}
+                {% for g in he_gifts %}
+                <article class="gift-card">
+                    <div class="gift-img-wrapper">
+                        <img src="/media/photos/public/{{ g.image }}" alt="{{ g.title }}">
+                    </div>
+                    <span class="gift-meta">Given: {{ g.date or "A Special Day" }}</span>
+                    <h3 style="font-size: 19px; color: #5a3040; margin: 0 0 8px; font-weight: 600;">{{ g.title }}</h3>
+                    <p style="color: #8c586c; font-size: 13.5px; line-height: 1.5; margin: 0;">{{ g.description or "" }}</p>
+                    {% if g.note %}
+                    <div class="gift-note">
+                        <strong>Your Note:</strong> "{{ g.note }}"
+                    </div>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">No private gifts recorded to her yet...</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

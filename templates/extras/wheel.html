@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Date Wheel & Timer Lock - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 850px; text-align: center; padding: 40px 20px;">
+    <div class="section-title" style="margin-bottom: 20px;">
+        <div class="eyebrow">ROMANTIC SURPRISE</div>
+        <h2>Date Idea Wheel 🎡</h2>
+        <p style="color: var(--deep-soft); font-size: 15px;">Set a lock timer for date night, and spin when the clock hits zero! 💕</p>
+    </div>
+
+    <!-- MAIN WHEEL CARD -->
+    <div class="card" style="padding: 35px 25px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-radius: 30px; box-shadow: 0 15px 40px rgba(90, 35, 55, 0.12); position: relative; overflow: hidden;">
+        
+        <!-- IF LOCKED: SHOW COUNTDOWN TIMER OVERLAY -->
+        {% if is_currently_locked %}
+        <div id="lockBanner" style="margin-bottom: 25px; padding: 25px; background: linear-gradient(135deg, #fff0f3, #ffd3dd); border-radius: 24px; border: 2px solid rgba(255, 117, 143, 0.4); animation: fadeIn 0.8s ease;">
+            <div style="font-size: 55px; margin-bottom: 10px; animation: heartBeat 2s infinite; display: inline-block;">🔒</div>
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--deep); margin: 0 0 8px;">Date Wheel is Locked!</h3>
+            <p style="font-size: 14px; color: var(--deep-soft); margin-bottom: 20px;">Shh... our surprise date night wheel unlocks when the timer reaches zero! ⏳</p>
+            
+            <!-- COUNTDOWN DISPLAY GRID -->
+            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <div style="background: white; padding: 12px 18px; border-radius: 16px; min-width: 75px; box-shadow: var(--shadow-small);">
+                    <div id="cd-hours" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600;">Hours</div>
+                </div>
+                <div style="background: white; padding: 12px 18px; border-radius: 16px; min-width: 75px; box-shadow: var(--shadow-small);">
+                    <div id="cd-mins" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600;">Mins</div>
+                </div>
+                <div style="background: white; padding: 12px 18px; border-radius: 16px; min-width: 75px; box-shadow: var(--shadow-small);">
+                    <div id="cd-secs" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600;">Secs</div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div style="margin-bottom: 15px;">
+            <span style="background: rgba(239, 200, 211, 0.3); color: var(--rose); font-weight: 600; padding: 6px 16px; border-radius: 20px; font-size: 13px;">
+                🔓 Wheel Unlocked & Ready!
+            </span>
+        </div>
+        {% endif %}
+
+        <!-- WHEEL CANVAS -->
+        <div style="position: relative; display: inline-block; margin: 15px auto;">
+            <!-- POINTER -->
+            <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 30px solid var(--rose); z-index: 100; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));"></div>
+            
+            <canvas id="wheelCanvas" width="380" height="380" style="max-width: 100%; height: auto; border-radius: 50%; border: 8px solid white; box-shadow: 0 10px 30px rgba(200, 90, 120, 0.25); {% if is_currently_locked %}filter: blur(4px) grayscale(40%); opacity: 0.6;{% endif %}"></canvas>
+        </div>
+
+        <!-- SPIN BUTTON -->
+        <div style="margin-top: 25px;">
+            {% if is_currently_locked %}
+            <button disabled class="btn" style="font-size: 18px; padding: 14px 45px; border-radius: 30px; opacity: 0.6; cursor: not-allowed;">
+                🔒 Locked by Timer
+            </button>
+            {% else %}
+            <button id="spinBtn" class="btn" style="font-size: 18px; padding: 14px 45px; border-radius: 30px; letter-spacing: 0.5px; box-shadow: 0 8px 25px rgba(200, 90, 120, 0.35);">
+                🎡 Spin the Wheel!
+            </button>
+            {% endif %}
+        </div>
+
+        <!-- RESULT POPUP -->
+        <div id="resultModal" style="display: none; margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #fff5f7, #ffd3dd); border-radius: 24px; border: 2px dashed var(--rose); animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <div style="font-size: 40px; margin-bottom: 5px;">🎉💖</div>
+            <h3 style="font-size: 24px; color: var(--deep); margin: 5px 0;">Today's Romantic Date:</h3>
+            <p id="resultText" style="font-size: 22px; font-weight: 700; color: var(--rose); margin: 10px 0;"></p>
+            <p style="font-size: 13px; color: var(--deep-soft); font-style: italic;">No excuses! Time to make a beautiful memory together. ✨</p>
+        </div>
+
+        <!-- LAST SPIN RESULT -->
+        {% if settings.last_spin_result %}
+        <div style="margin-top: 25px; font-size: 13px; color: var(--deep-soft); background: rgba(239,200,211,0.2); padding: 8px 16px; border-radius: 20px; display: inline-block;">
+            Last Selected Date: <strong>{{ settings.last_spin_result }}</strong>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- LOCK TIMER CONTROL CARD -->
+    <div class="card" style="margin-top: 35px; padding: 25px; border-radius: 24px; background: white; text-align: center;">
+        <h3 style="font-size: 20px; color: var(--deep); margin-bottom: 12px;">⏱️ Date Wheel Timer Controls</h3>
+        <p style="font-size: 13px; color: var(--deep-soft); margin-bottom: 20px;">Set a countdown timer so the date wheel stays locked until date time!</p>
+        
+        <form action="{{ url_for('extras.lock_wheel') }}" method="POST" style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 15px;">
+            <label style="font-size: 14px; font-weight: 600; color: var(--deep);">Lock for:</label>
+            <select name="hours" style="padding: 10px 15px; border-radius: 12px; border: 1px solid #efc8d3; background: white; font-size: 14px; color: var(--deep);">
+                <option value="1">1 Hour ⏱️</option>
+                <option value="2">2 Hours ⏱️</option>
+                <option value="4">4 Hours ⏱️</option>
+                <option value="6">6 Hours ⏱️</option>
+                <option value="12">12 Hours 🌙</option>
+                <option value="24" selected>24 Hours (1 Day) ☀️</option>
+                <option value="48">48 Hours (2 Days) 🗓️</option>
+            </select>
+            <button type="submit" class="btn" style="padding: 10px 22px; font-size: 13px;">🔒 Lock Wheel with Timer</button>
+        </form>
+
+        {% if is_currently_locked %}
+        <form action="{{ url_for('extras.unlock_wheel') }}" method="POST" style="margin-top: 10px;">
+            <button type="submit" class="btn alt" style="padding: 8px 18px; font-size: 12px; color: var(--rose);">
+                🔓 Unlock Wheel Now
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const spinBtn = document.getElementById("spinBtn");
+    const resultModal = document.getElementById("resultModal");
+    const resultText = document.getElementById("resultText");
+
+    const ideas = [
+        "Movie Show 🎬🍿",
+        "Hug & Kisses 🤗💋",
+        "Romantic Dance 💃",
+        "Chocolate Surprise 🍫",
+        "Gift A Pretty Dress 👗",
+        "Sweet Lip Kiss 💋",
+        "Wild Intimacy Sex 🔥",
+        "Outing Trip Together 🚗✈️"
+    ];
+
+    const colors = [
+        "#ff8fa3", "#ffb3c1", "#ff4d6d", "#c77dff",
+        "#e0aaff", "#ff758f", "#ff9ebb", "#e29578"
+    ];
+
+    const numSlices = ideas.length;
+    const arcSize = (2 * Math.PI) / numSlices;
+    let currentAngle = 0;
+    let isSpinning = false;
+
+    function drawWheel() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const radius = cx - 10;
+
+        for (let i = 0; i < numSlices; i++) {
+            const angle = currentAngle + i * arcSize;
+            ctx.beginPath();
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, radius, angle, angle + arcSize);
+            ctx.lineTo(cx, cy);
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#ffffff";
+            ctx.stroke();
+
+            // Text
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angle + arcSize / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "bold 13px Poppins, sans-serif";
+            ctx.shadowColor = "rgba(0,0,0,0.3)";
+            ctx.shadowBlur = 3;
+            ctx.fillText(ideas[i], radius - 20, 5);
+            ctx.restore();
+        }
+
+        // Center Pin
+        ctx.beginPath();
+        ctx.arc(cx, cy, 25, 0, 2 * Math.PI);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "var(--rose)";
+        ctx.stroke();
+
+        ctx.fillStyle = "var(--rose)";
+        ctx.font = "bold 16px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("♥", cx, cy);
+    }
+
+    drawWheel();
+
+    {% if is_currently_locked and unlock_iso %}
+    // COUNTDOWN TIMER SCRIPT
+    const unlockTime = new Date("{{ unlock_iso }}").getTime();
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const diff = unlockTime - now;
+
+        if (diff <= 0) {
+            window.location.reload();
+            return;
+        }
+
+        const hrs = Math.floor(diff / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const cdH = document.getElementById("cd-hours");
+        const cdM = document.getElementById("cd-mins");
+        const cdS = document.getElementById("cd-secs");
+
+        if (cdH) cdH.textContent = String(hrs).padStart(2, '0');
+        if (cdM) cdM.textContent = String(mins).padStart(2, '0');
+        if (cdS) cdS.textContent = String(secs).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    {% endif %}
+
+    if (spinBtn) {
+        spinBtn.addEventListener("click", function() {
+            if (isSpinning) return;
+            isSpinning = true;
+            spinBtn.disabled = true;
+            resultModal.style.display = "none";
+
+            const spinAngle = Math.random() * 10 + 25; // 25-35 rotations
+            const duration = 4000;
+            const start = performance.now();
+
+            function animate(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                currentAngle = easeOut * spinAngle * Math.PI;
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+
+                    const normalizedAngle = (currentAngle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+                    const pointerAngle = (3 * Math.PI / 2 - normalizedAngle + 2 * Math.PI) % (2 * Math.PI);
+                    const winningIndex = Math.floor(pointerAngle / arcSize) % numSlices;
+
+                    const wonIdea = ideas[winningIndex];
+                    resultText.textContent = wonIdea;
+                    resultModal.style.display = "block";
+
+                    // Save result to DB
+                    fetch("/extras/wheel/result", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: "result=" + encodeURIComponent(wonIdea)
+                    });
+                }
+            }
+
+            requestAnimationFrame(animate);
+        });
+    }
+});
+</script>
+{% endblock %}

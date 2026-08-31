@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Add Private Memory ❤️{% endblock %}
+
+{% block content %}
+
+<section class="private-page">
+
+    <div class="lockbox">
+
+        <div class="private-heart">🔐</div>
+
+        <div class="eyebrow">
+            ONLY FOR US
+        </div>
+
+        <h1>
+            Add a Private Memory ❤️
+        </h1>
+
+        <p>
+            Choose a photo from your phone or laptop.
+            <br>
+            It will be stored in your private memories.
+        </p>
+
+
+        {% if error %}
+        <div class="flash error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="private-upload-form"
+        >
+
+            <!-- PHOTO -->
+
+            <label class="upload-label">
+                📷 Choose Photo
+            </label>
+
+            <input
+                type="file"
+                name="photo"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                required
+            >
+
+
+            <!-- TITLE -->
+
+            <label class="upload-label">
+                💕 Title
+            </label>
+
+            <input
+                type="text"
+                name="title"
+                placeholder="Our special moment ❤️"
+                maxlength="160"
+            >
+
+
+            <!-- DESCRIPTION -->
+
+            <label class="upload-label">
+                ✨ Description
+            </label>
+
+            <textarea
+                name="description"
+                placeholder="Write something about this memory..."
+                rows="4"
+            ></textarea>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="btn private-add-submit"
+            >
+                ❤️ Save Private Memory
+            </button>
+
+        </form>
+
+
+        <a
+            href="{{ url_for('private.private_gallery') }}"
+            class="back-link"
+        >
+            ← Back to Private Memories
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Add Gift Memory - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('gifts.gifts') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Gifts
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.95);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Add Gift Memory 🎁</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-size: 14px; color: var(--deep-soft);">
+            Record a gift exchanged between us, along with a photo. You can crop it before saving!
+        </p>
+
+        <form id="upload-form" method="POST" enctype="multipart/form-data">
+            <!-- GIFT TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Gift Name</label>
+            <input type="text" name="title" placeholder="Cute Mug / Silver Ring ❤️" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- DESCRIPTION -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Description / Memory</label>
+            <textarea name="description" placeholder="Where did we buy this? How did it feel to exchange it?..." rows="4" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical;"></textarea>
+
+            <!-- GIVER CATEGORY -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Category</label>
+            <select name="giver" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; background: #fff;">
+                <option value="she_gave">💝 Gift She Gave Me</option>
+                <option value="he_gave">🎁 Gift I Gave Her</option>
+            </select>
+
+            <!-- DATE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Date Exchanged</label>
+            <input type="text" name="date" placeholder="14 February 2025 / Valentine's Day" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;">
+
+            <!-- OPTIONAL NOTE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Optional Love Note</label>
+            <input type="text" name="note" placeholder="E.g. You always make me feel safe ❤️" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;">
+
+            <!-- PHOTO FILE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Choose Photo File</label>
+            <input type="file" id="file-input" name="photo" accept="image/*" style="width: 100%; padding: 10px; margin-bottom: 20px; box-sizing: border-box;" required>
+
+            <!-- CROP EDITOR CONTAINER -->
+            <div id="crop-wrapper" style="display: none; margin-bottom: 25px; border: 1px solid #efc8d3; padding: 15px; border-radius: 12px; background: #fffcfd;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--rose);">Crop & Rotate</label>
+                <div style="max-height: 300px; overflow: hidden; border-radius: 8px;">
+                    <img id="image-to-crop" style="max-width: 100%;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 12px;">
+                    <button type="button" id="rotate-l-btn" class="btn alt" style="flex: 1; padding: 8px; font-size: 13px;">↺ Left</button>
+                    <button type="button" id="rotate-r-btn" class="btn alt" style="flex: 1; padding: 8px; font-size: 13px;">↻ Right</button>
+                    <button type="button" id="crop-btn" class="btn" style="flex: 2; padding: 8px; font-size: 13px;">✔️ Confirm Crop</button>
+                </div>
+            </div>
+
+            <!-- PRIVATE CHECKBOX -->
+            <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                <input type="checkbox" name="is_private" id="is-private" style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;" {% if request.args.get('private') == 'true' %}checked{% endif %}>
+                <label for="is-private" style="cursor: pointer; font-weight: 500; color: var(--deep);">
+                    🔒 Save to Private section
+                </label>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" id="submit-btn" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Save Gift Memory
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const fileInput = document.getElementById("file-input");
+    const cropWrapper = document.getElementById("crop-wrapper");
+    const imageToCrop = document.getElementById("image-to-crop");
+    const cropBtn = document.getElementById("crop-btn");
+    const rotateLBtn = document.getElementById("rotate-l-btn");
+    const rotateRBtn = document.getElementById("rotate-r-btn");
+    const uploadForm = document.getElementById("upload-form");
+    const submitBtn = document.getElementById("submit-btn");
+
+    let cropper = null;
+    let croppedBlob = null;
+
+    fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            imageToCrop.src = event.target.result;
+            cropWrapper.style.display = "block";
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(imageToCrop, {
+                aspectRatio: NaN,
+                viewMode: 1,
+                autoCropArea: 1,
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+
+    rotateLBtn.addEventListener("click", () => {
+        if (cropper) cropper.rotate(-90);
+    });
+
+    rotateRBtn.addEventListener("click", () => {
+        if (cropper) cropper.rotate(90);
+    });
+
+    cropBtn.addEventListener("click", () => {
+        if (!cropper) return;
+        cropper.getCroppedCanvas({
+            maxWidth: 1600,
+            maxHeight: 1600,
+        }).toBlob((blob) => {
+            croppedBlob = blob;
+            alert("Photo cropped successfully! Click 'Save Gift Memory' below to upload. ❤️");
+            cropWrapper.style.background = "#f0fdf4";
+        }, "image/jpeg", 0.9);
+    });
+
+    uploadForm.addEventListener("submit", (e) => {
+        if (croppedBlob) {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Uploading Cropped Image...";
+
+            const formData = new FormData(uploadForm);
+            formData.set("photo", croppedBlob, "cropped_gift.jpg");
+
+            const isPrivate = document.getElementById("is-private").checked;
+
+            fetch(uploadForm.action, {
+                method: "POST",
+                body: formData
+            }).then(res => {
+                if (res.ok) {
+                    window.location.href = isPrivate ? "{{ url_for('private.private_gifts') }}" : "{{ url_for('gifts.gifts') }}";
+                } else {
+                    alert("Upload failed. Please try again. ❤️");
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = "❤️ Save Gift Memory";
+                }
+            }).catch(err => {
+                console.error(err);
+                alert("Upload error. Please try again. ❤️");
+                submitBtn.disabled = false;
+                submitBtn.textContent = "❤️ Save Gift Memory";
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

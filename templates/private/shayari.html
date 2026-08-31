@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Shayari - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .shayari-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .shayari-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .shayari-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        color: #5a3040;
+        margin-bottom: 10px;
+    }
+    .shayari-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .shayari-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(255, 182, 193, 0.35);
+        border-radius: 20px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: var(--shadow-small);
+        position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .shayari-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+    }
+    .quote-icon {
+        font-size: 30px;
+        color: var(--rose);
+        opacity: 0.3;
+        margin-bottom: 10px;
+    }
+    .shayari-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        color: #5a3040;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+    .shayari-text {
+        font-size: 14.5px;
+        color: #5a3040;
+        line-height: 1.8;
+        font-style: italic;
+        margin-bottom: 15px;
+        white-space: pre-line;
+    }
+    .shayari-img-wrapper {
+        margin-top: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        max-height: 200px;
+        background: #faf8f8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .shayari-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        max-height: 200px;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 24px;
+        border: 1px dashed rgba(255, 182, 193, 0.6);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="shayari-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="shayari-header">
+        <h1>❤️ Our Private Shayari</h1>
+        <p style="color: var(--deep-soft); font-size: 14px;">Lines of love and poetry written just for us. ✍️</p>
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('shayari.add_shayari', private='true') }}" class="btn">
+                + Add Private Shayari
+            </a>
+        </div>
+    </div>
+
+    {% if shayaris %}
+    <div class="shayari-grid">
+        {% for s in shayaris %}
+        <article class="shayari-card">
+            <div class="quote-icon">❝</div>
+            {% if s.title %}
+            <h3 class="shayari-title">{{ s.title }}</h3>
+            {% endif %}
+            <div class="shayari-text">{{ s.body }}</div>
+            {% if s.image %}
+            <div class="shayari-img-wrapper">
+                <img src="/media/photos/public/{{ s.image }}" alt="Romantic Verse">
+            </div>
+            {% endif %}
+            <div style="margin-top: 15px; font-size: 12px; color: var(--rose); opacity: 0.8;">💖</div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 50px; margin-bottom: 15px;">✍️</div>
+        <h3 style="color: #5a3040; font-size: 20px; margin-bottom: 8px;">No secret shayari yet...</h3>
+        <p style="color: #8c586c; font-size: 13px; margin-bottom: 20px;">Save a romantic verse or poetry line just between you two.</p>
+        <a href="{{ url_for('shayari.add_shayari', private='true') }}" class="btn">Add Secret Shayari</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+/* =========================================================
+   OUR FOREVER ❤️ - ANIMATIONS & FLOWER SHOWER (FULA JHARIBA)
+========================================================= */
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(35px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(3deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.25); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.2); }
+    70% { transform: scale(1); }
+}
+
+/* Floating Heart Animation */
+@keyframes drift {
+    0% { transform: translateY(20px) rotate(0deg); opacity: 0; }
+    15% { opacity: 0.8; }
+    100% { transform: translateY(-100vh) rotate(220deg); opacity: 0; }
+}
+
+/* FLOWER PETAL SHOWER ANIMATION (FULA JHARIBA 🌸🌹) */
+@keyframes petalFall {
+    0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg) scale(0.7);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(50vh) translateX(30px) rotate(180deg) scale(1.1);
+        opacity: 0.95;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(105vh) translateX(-30px) rotate(360deg) scale(0.6);
+        opacity: 0;
+    }
+}
+
+@keyframes petalSway {
+    0%, 100% { margin-left: 0px; }
+    50% { margin-left: 45px; }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(255, 182, 193, 0.4); }
+    50% { box-shadow: 0 0 35px rgba(200, 90, 120, 0.7); }
+}
+
+.fade-up {
+    animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.float {
+    animation: float 4s ease-in-out infinite;
+}
+
+.pulse {
+    animation: pulse 2.4s ease-in-out infinite;
+}
+
+.heart {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    color: #e58aa3;
+    animation: drift 7s linear forwards;
+    z-index: 2;
+}
+
+.petal-shower-leaf {
+    position: fixed;
+    top: -40px;
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+    animation: petalFall 6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, petalSway 3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 4px 10px rgba(200, 90, 120, 0.25));
+}

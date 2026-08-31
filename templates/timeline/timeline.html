@@ -1,0 +1,527 @@
+{% extends "base.html" %}
+
+{% block title %}Our Journey & Map - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<!-- Leaflet CSS for Interactive Map -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    .journey-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .journey-header {
+        text-align: center;
+        margin-bottom: 45px;
+    }
+    .journey-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(38px, 5vw, 52px);
+        color: var(--deep);
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    /* MAP CONTAINER */
+    .map-card {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 25px;
+        box-shadow: 0 15px 45px rgba(90, 35, 55, 0.1);
+        border: 1px solid rgba(255, 182, 193, 0.5);
+        margin-bottom: 50px;
+        position: relative;
+    }
+    #odisha-map {
+        width: 100%;
+        height: 480px;
+        border-radius: 20px;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    /* ANIMATED MAP MARKERS */
+    .custom-animated-pin {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        pointer-events: auto;
+        cursor: pointer;
+    }
+    .pin-bubble {
+        position: relative;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+        border: 2px solid #ffffff;
+        flex-shrink: 0;
+    }
+    .pin-bubble.pink {
+        background: linear-gradient(135deg, #ff4081, #d81b60);
+    }
+    .pin-bubble.blue {
+        background: linear-gradient(135deg, #1e88e5, #1565c0);
+    }
+    .pin-bubble.gold {
+        background: linear-gradient(135deg, #ffb300, #ff8f00);
+    }
+    .pin-pulse {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        animation: pinRipple 1.8s infinite ease-out;
+        pointer-events: none;
+    }
+    .pin-bubble.pink .pin-pulse { background: rgba(255, 64, 129, 0.6); }
+    .pin-bubble.blue .pin-pulse { background: rgba(30, 136, 229, 0.6); }
+    .pin-bubble.gold .pin-pulse { background: rgba(255, 179, 0, 0.6); }
+
+    @keyframes pinRipple {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    .pin-label-badge {
+        background: rgba(255, 255, 255, 0.96);
+        color: #2b141d;
+        padding: 5px 12px;
+        border-radius: 16px;
+        font-size: 11px;
+        font-weight: 700;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+        border: 1.5px solid rgba(220, 100, 140, 0.4);
+        animation: labelFloat 2s infinite ease-in-out;
+    }
+    @keyframes labelFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+    }
+
+    /* LANDMARK BADGES */
+    .landmark-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(200, 90, 120, 0.08);
+        color: var(--deep);
+        border: 1px solid rgba(200, 90, 120, 0.2);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        margin: 4px 4px 4px 0;
+        transition: all 0.25s ease;
+    }
+    .landmark-tag:hover {
+        background: var(--rose);
+        color: #ffffff;
+        transform: translateY(-2px);
+    }
+
+    /* TIMELINE CARDS */
+    .journey-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 45px;
+    }
+    .journey-card {
+        background: #ffffff;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(90, 35, 55, 0.08);
+        border: 1px solid rgba(255, 182, 193, 0.4);
+        display: grid;
+        grid-template-columns: 1.1fr 1.2fr;
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .journey-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 22px 55px rgba(90, 35, 55, 0.15);
+    }
+    .journey-card-img {
+        height: 100%;
+        min-height: 340px;
+        background: #faf5f6;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .journey-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .journey-card:hover .journey-card-img img {
+        transform: scale(1.04);
+    }
+    .journey-card-content {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* MINI PHOTO STRIP */
+    .photo-strip {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    .photo-strip-item {
+        width: 75px;
+        height: 75px;
+        border-radius: 14px;
+        overflow: hidden;
+        flex-shrink: 0;
+        cursor: pointer;
+        border: 2px solid rgba(255, 182, 193, 0.6);
+        transition: transform 0.25s ease;
+    }
+    .photo-strip-item:hover {
+        transform: scale(1.1);
+        border-color: var(--rose);
+    }
+    .photo-strip-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .journey-card {
+            grid-template-columns: 1fr;
+        }
+        .journey-card-img {
+            height: 260px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="journey-container">
+    <div class="journey-header">
+        <div class="chapter-badge" style="display: inline-block; background: rgba(200, 90, 120, 0.12); color: var(--rose); font-size: 12px; padding: 6px 18px; border-radius: 20px; letter-spacing: 2px; margin-bottom: 12px;">
+            BIKASH KUMAR PANDA & POONAM AMRITA PRUSTY
+        </div>
+        <h1>📍 Our Odisha Travel & Hometown Journey</h1>
+        <p style="color: var(--deep-soft); font-size: 15px; max-width: 750px; margin: 0 auto;">
+            From Bikash & Poonam's sweet homes in Jajpur to sacred temples, golden beaches, exploration walks, and shopping malls across Odisha! Tap any glowing pin on the map to explore full addresses and details. ❤️
+        </p>
+    </div>
+
+    <!-- INTERACTIVE ODISHA MAP -->
+    <div class="map-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--deep); margin: 0; font-weight: 700;">
+                🗺️ Interactive Journey Map
+            </h3>
+            <span style="font-size: 13px; color: var(--rose); font-weight: 600; background: rgba(255, 64, 129, 0.1); padding: 6px 14px; border-radius: 20px; border: 1px dashed var(--rose);">
+                ✨ Tap any glowing pin below to view home addresses & spot details! 👈
+            </span>
+        </div>
+        <div id="odisha-map"></div>
+    </div>
+
+    <!-- TIMELINE LISTING -->
+    <div class="journey-grid">
+        <!-- POONAM'S SWEET HOME (JAJPUR TOWN) -->
+        <article class="journey-card" id="city-jajpur">
+            <div class="journey-card-img" onclick="openJourneyLightbox('/media/photos/public/jajpur_home.svg', 'Poonam Amrita Prusty\'s Sweet Home 🏡💖', 'Jajpur Town, Bidyadharpur, Prustysahi (Near Laxmi Mandir), Odisha.')">
+                <img src="/media/photos/public/jajpur_home.svg" alt="Poonam Amrita Prusty Home Jajpur Town">
+            </div>
+            <div class="journey-card-content">
+                <div style="font-size: 13px; color: var(--rose); font-weight: 600; margin-bottom: 6px;">📍 HER SWEET HOMETOWN & HOME</div>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--deep); margin: 0 0 12px; font-weight: 700;">
+                    Poonam Amrita Prusty's Sweet Home 🏡💖
+                </h2>
+                <p style="font-size: 14px; color: var(--deep-soft); line-height: 1.7; margin-bottom: 15px;">
+                    <b>Odisha → Jajpur → Jajpur Town → Bidyadharpur → Prustysahi (Near Laxmi Mandir).</b> The sweet, sacred home of Poonam Amrita Prusty — the girl who holds my heart forever and ever! ❤️
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--deep); margin-bottom: 6px;">HER HOME ADDRESS HIGHLIGHTS:</div>
+                    <span class="landmark-tag">🏡 Prustysahi</span>
+                    <span class="landmark-tag">🛕 Laxmi Mandir</span>
+                    <span class="landmark-tag">📍 Bidyadharpur</span>
+                    <span class="landmark-tag">🏰 Jajpur Town</span>
+                    <span class="landmark-tag">👧 Poonam Amrita Prusty</span>
+                </div>
+                <div class="photo-strip">
+                    <div class="photo-strip-item" onclick="openJourneyLightbox('/media/photos/public/jajpur_home.svg', 'Poonam\'s Home Illustration', 'Bidyadharpur, Prustysahi near Laxmi Mandir.')">
+                        <img src="/media/photos/public/jajpur_home.svg" alt="Poonam Home">
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- BIKASH'S SWEET HOME (PATHAPUR, BADACHANA, JAJPUR) -->
+        <article class="journey-card" id="city-bikash">
+            <div class="journey-card-img" onclick="openJourneyLightbox('/media/photos/public/bikash_home.svg', 'Bikash Kumar Panda\'s Sweet Home 🏠💙', 'Badachana, Raipur, Talua Balikuda, Pathapur Village River Side Road (Near Jagannath Temple), Jajpur, Odisha.')">
+                <img src="/media/photos/public/bikash_home.svg" alt="Bikash Kumar Panda Home Pathapur Badachana">
+            </div>
+            <div class="journey-card-content">
+                <div style="font-size: 13px; color: #1565c0; font-weight: 600; margin-bottom: 6px;">📍 HIS SWEET HOMETOWN & HOME</div>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--deep); margin: 0 0 12px; font-weight: 700;">
+                    Bikash Kumar Panda's Sweet Home 🏠💙
+                </h2>
+                <p style="font-size: 14px; color: var(--deep-soft); line-height: 1.7; margin-bottom: 15px;">
+                    <b>Odisha → Jajpur → Badachana → Raipur → Talua Balikuda → Pathapur (River Side Road, Near Jagannath Temple).</b> The cherished home of Bikash Kumar Panda — counting every second of love together! 💙
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--deep); margin-bottom: 6px;">HIS HOME ADDRESS HIGHLIGHTS:</div>
+                    <span class="landmark-tag">🏠 Pathapur Village</span>
+                    <span class="landmark-tag">🌊 River Side Road</span>
+                    <span class="landmark-tag">🛕 Jagannath Temple</span>
+                    <span class="landmark-tag">📍 Talua Balikuda, Raipur</span>
+                    <span class="landmark-tag">🏰 Badachana, Jajpur</span>
+                    <span class="landmark-tag">👦 Bikash Kumar Panda</span>
+                </div>
+                <div class="photo-strip">
+                    <div class="photo-strip-item" onclick="openJourneyLightbox('/media/photos/public/bikash_home.svg', 'Bikash\'s Home Illustration', 'Badachana, Raipur, Talua Balikuda, Pathapur River Side Road near Jagannath Temple.')">
+                        <img src="/media/photos/public/bikash_home.svg" alt="Bikash Home">
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- SAMBALPUR -->
+        <article class="journey-card" id="city-sambalpur">
+            <div class="journey-card-img" onclick="openJourneyLightbox('/media/photos/public/sambalpur_trip.png', 'Sambalpur Romantic Escapes 🌺', 'Samaleswari Temple, Hirakud Dam, Gandhi Minar & Budharaja Hilltop.')">
+                <img src="/media/photos/public/sambalpur_trip.png" alt="Sambalpur Journey">
+            </div>
+            <div class="journey-card-content">
+                <div style="font-size: 13px; color: var(--rose); font-weight: 600; margin-bottom: 6px;">📍 WESTERN ODISHA</div>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--deep); margin: 0 0 12px; font-weight: 700;">
+                    Sambalpur Romantic Escapes 🌺
+                </h2>
+                <p style="font-size: 14px; color: var(--deep-soft); line-height: 1.7; margin-bottom: 15px;">
+                    Exploring the timeless beauty of Sambalpur together — seeking divine blessings at Maa Samaleswari temple and gazing at river sunsets from Gandhi Minar atop Hirakud Dam.
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--deep); margin-bottom: 6px;">VISITED DESTINATIONS:</div>
+                    <span class="landmark-tag">🛕 Samaleswari Temple</span>
+                    <span class="landmark-tag">🌊 Hirakud Dam</span>
+                    <span class="landmark-tag">🗼 Gandhi Minar</span>
+                    <span class="landmark-tag">⛰️ Budharaja Hilltop</span>
+                    <span class="landmark-tag">🦌 Sambalpur Zoo (Deer Park)</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- ROURKELA -->
+        <article class="journey-card" id="city-rourkela">
+            <div class="journey-card-img" onclick="openJourneyLightbox('/media/photos/public/rourkela_trip.png', 'Rourkela City & Hilltop Memories 🎡', 'Plutone Mall, IG Park, Vaishno Devi Temple & Hanuman Vatika.')">
+                <img src="/media/photos/public/rourkela_trip.png" alt="Rourkela Journey">
+            </div>
+            <div class="journey-card-content">
+                <div style="font-size: 13px; color: var(--rose); font-weight: 600; margin-bottom: 6px;">📍 STEEL CITY</div>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--deep); margin: 0 0 12px; font-weight: 700;">
+                    Rourkela City & Hilltop Memories 🎡
+                </h2>
+                <p style="font-size: 14px; color: var(--deep-soft); line-height: 1.7; margin-bottom: 15px;">
+                    Lively shopping mall dates at Forum Galleria / Plutone Mall, serene botanical park strolls in IG Park, and hilltop views across Rourkela.
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--deep); margin-bottom: 6px;">VISITED DESTINATIONS:</div>
+                    <span class="landmark-tag">🛍️ Forum Galleria / Plutone Mall</span>
+                    <span class="landmark-tag">🛕 Vaishno Devi Temple</span>
+                    <span class="landmark-tag">🌳 IG Park</span>
+                    <span class="landmark-tag">🛕 Trishakti Dham</span>
+                    <span class="landmark-tag">🗿 Hanuman Vatika</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- BHUBANESWAR -->
+        <article class="journey-card" id="city-bhubaneswar">
+            <div class="journey-card-img" onclick="openJourneyLightbox('/media/photos/public/bhubaneswar_trip.png', 'Temple City Magic in Bhubaneswar 🏰', 'Nandankanan Zoo, Esplanade One Mall, Lingaraj Temple & Ram Mandir.')">
+                <img src="/media/photos/public/bhubaneswar_trip.png" alt="Bhubaneswar Journey">
+            </div>
+            <div class="journey-card-content">
+                <div style="font-size: 13px; color: var(--rose); font-weight: 600; margin-bottom: 6px;">📍 CAPITAL CITY</div>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--deep); margin: 0 0 12px; font-weight: 700;">
+                    Temple City Magic in Bhubaneswar 🏰
+                </h2>
+                <p style="font-size: 14px; color: var(--deep-soft); line-height: 1.7; margin-bottom: 15px;">
+                    From wildlife safari walks in Nandankanan Zoo to shopping dates at Esplanade One Mall, seeking holy grace at Lingaraj Temple, Ram Mandir & ISKCON.
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--deep); margin-bottom: 6px;">VISITED DESTINATIONS:</div>
+                    <span class="landmark-tag">🦁 Nandankanan Zoo</span>
+                    <span class="landmark-tag">🛍️ Esplanade One Mall</span>
+                    <span class="landmark-tag">🛕 Lingaraj Temple</span>
+                    <span class="landmark-tag">🛕 Ram Mandir</span>
+                    <span class="landmark-tag">🛕 ISKCON Temple</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- PURI -->
+        <article class="journey-card" id="city-puri">
+            <div class="journey-card-img" onclick="openJourneyLightbox('/media/photos/public/puri_jagannath_beach.svg', 'Shree Jagannath Temple & Puri Golden Beach 🌊', 'Shree Jagannath Temple, Golden Beach, Swargadwar Beach & Blue Flag Beach.')">
+                <img src="/media/photos/public/puri_jagannath_beach.svg" alt="Puri Jagannath Temple & Golden Beach">
+            </div>
+            <div class="journey-card-content">
+                <div style="font-size: 13px; color: var(--rose); font-weight: 600; margin-bottom: 6px;">📍 HOLY DHAM & SEA COAST</div>
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--deep); margin: 0 0 12px; font-weight: 700;">
+                    Puri Jagannath Blessings & Sea Waves 🌊
+                </h2>
+                <p style="font-size: 14px; color: var(--deep-soft); line-height: 1.7; margin-bottom: 15px;">
+                    Fulfilling divine prayers at Lord Jagannath temple and enjoying barefoot walks along the golden ocean waves of Swargadwar & Blue Flag Beach in Puri.
+                </p>
+                <div style="margin-bottom: 12px;">
+                    <div style="font-size: 12px; font-weight: 600; color: var(--deep); margin-bottom: 6px;">VISITED DESTINATIONS:</div>
+                    <span class="landmark-tag">🛕 Shree Jagannath Temple</span>
+                    <span class="landmark-tag">🏖️ Golden Beach</span>
+                    <span class="landmark-tag">🏖️ Swargadwar Beach</span>
+                    <span class="landmark-tag">🏖️ Blue Flag Beach</span>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+
+<!-- LIGHTBOX MODAL FOR JOURNEY PHOTOS -->
+<div id="journey-lightbox-modal" class="lightbox-modal" onclick="closeJourneyLightboxOnBackdrop(event)">
+    <div class="lightbox-content">
+        <div class="lightbox-close" onclick="closeJourneyLightbox()">✕</div>
+        <div class="lightbox-img-wrapper">
+            <img id="journey-lightbox-img" src="" alt="Journey Preview">
+        </div>
+        <div class="lightbox-caption">
+            <h3 id="journey-lightbox-title" style="margin: 0 0 6px; color: var(--rose);">Journey Title</h3>
+            <p id="journey-lightbox-desc" style="margin: 0; color: #fff; font-size: 14px;">Journey Description</p>
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet JS for Map -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize Map centered on Odisha
+        const map = L.map('odisha-map').setView([20.65, 84.85], 7);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Cities & Destinations Data
+        const locations = [
+            {
+                name: "👧 Poonam Amrita Prusty's Sweet Home 💖",
+                coords: [20.8504, 86.3311],
+                details: "<b>🏡 Her Sweet Home Address:</b><br>• Bidyadharpur, Prustysahi<br>• Near Laxmi Mandir<br>• Jajpur Town, Jajpur, Odisha<br><i style='color: #d81b60;'>'The sweet home of Poonam Amrita Prusty!'</i> ❤️",
+                anchor: "city-jajpur",
+                color: "pink",
+                icon: "💖",
+                label: "👧 Poonam's Home (Tap Me!) 👈"
+            },
+            {
+                name: "👦 Bikash Kumar Panda's Sweet Home 🏠💙",
+                coords: [20.6700, 86.2400],
+                details: "<b>🏠 His Sweet Home Address:</b><br>• Pathapur Village, Balikuda<br>• Near Jagannath Temple, Pathapur<br>• Balichandrapur / Bari Road, Jajpur, Odisha<br><i style='color: #1565c0;'>'The sweet home of Bikash Kumar Panda!'</i> 💙",
+                anchor: "city-bikash",
+                color: "blue",
+                icon: "🏠",
+                label: "👦 Bikash's Home (Pathapur, Balikuda) 👈"
+            },
+            {
+                name: "Sambalpur 🌺",
+                coords: [21.4669, 83.9812],
+                details: "<b>Sambalpur Spot Highlights:</b><br>• Samaleswari Temple<br>• Hirakud Dam & Gandhi Minar<br>• Budharaja Hilltop<br>• Sambalpur Zoo",
+                anchor: "city-sambalpur",
+                color: "gold",
+                icon: "🌺",
+                label: "Sambalpur (Tap Me!) 👈"
+            },
+            {
+                name: "Rourkela 🎡",
+                coords: [22.2604, 84.8536],
+                details: "<b>Rourkela Spot Highlights:</b><br>• Forum Galleria / Plutone Mall<br>• Vaishno Devi Temple<br>• IG Park<br>• Trishakti Dham<br>• Hanuman Vatika",
+                anchor: "city-rourkela",
+                color: "gold",
+                icon: "🎡",
+                label: "Rourkela (Tap Me!) 👈"
+            },
+            {
+                name: "Bhubaneswar 🏰",
+                coords: [20.2961, 85.8245],
+                details: "<b>Bhubaneswar Spot Highlights:</b><br>• Nandankanan Zoo<br>• Esplanade One Mall<br>• Lingaraj Temple & Ram Mandir<br>• ISKCON Temple",
+                anchor: "city-bhubaneswar",
+                color: "gold",
+                icon: "🏰",
+                label: "Bhubaneswar (Tap Me!) 👈"
+            },
+            {
+                name: "Puri 🌊",
+                coords: [19.8135, 85.8312],
+                details: "<b>Puri Spot Highlights:</b><br>• Shree Jagannath Temple<br>• Golden Beach<br>• Swargadwar Beach<br>• Blue Flag Beach",
+                anchor: "city-puri",
+                color: "gold",
+                icon: "🌊",
+                label: "Puri (Tap Me!) 👈"
+            }
+        ];
+
+        locations.forEach(loc => {
+            const customHtml = `
+                <div class="custom-animated-pin">
+                    <div class="pin-bubble ${loc.color}">
+                        <div class="pin-pulse"></div>
+                        <span>${loc.icon}</span>
+                    </div>
+                    <div class="pin-label-badge">${loc.label}</div>
+                </div>
+            `;
+            const customIcon = L.divIcon({
+                html: customHtml,
+                className: '',
+                iconSize: [180, 45],
+                iconAnchor: [20, 22]
+            });
+
+            const marker = L.marker(loc.coords, { icon: customIcon }).addTo(map);
+            marker.bindPopup(`
+                <div style="font-family: 'Poppins', sans-serif; padding: 6px; max-width: 260px;">
+                    <h4 style="margin: 0 0 6px; color: #b84065; font-size: 16px;">${loc.name}</h4>
+                    <p style="margin: 0 0 10px; font-size: 13px; color: #333; line-height: 1.6;">${loc.details}</p>
+                    <a href="#${loc.anchor}" style="display: inline-block; font-size: 11px; color: #fff; background: #b84065; padding: 6px 12px; border-radius: 14px; text-decoration: none; font-weight: 600;">View Full Story ↓</a>
+                </div>
+            `);
+        });
+    });
+
+    function openJourneyLightbox(imgUrl, title, desc) {
+        document.getElementById("journey-lightbox-img").src = imgUrl;
+        document.getElementById("journey-lightbox-title").textContent = title;
+        document.getElementById("journey-lightbox-desc").textContent = desc;
+        document.getElementById("journey-lightbox-modal").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeJourneyLightbox() {
+        document.getElementById("journey-lightbox-modal").classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+
+    function closeJourneyLightboxOnBackdrop(e) {
+        if (e.target.id === "journey-lightbox-modal") {
+            closeJourneyLightbox();
+        }
+    }
+</script>
+{% endblock %}

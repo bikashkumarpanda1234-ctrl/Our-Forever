@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}
+Private Memories 🔐
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/private.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="private-unlock-page">
+
+    <div class="unlock-decoration unlock-heart">
+        ♥
+    </div>
+
+    <div class="lockbox">
+
+        <div class="lock-icon">
+            🔐
+        </div>
+
+        <div class="eyebrow">
+            just between us
+        </div>
+
+        <h1>
+            Our Secret Place
+        </h1>
+
+        <p class="unlock-text">
+            Some memories are meant to stay
+            between two hearts. ❤️
+        </p>
+
+        {% if error %}
+
+        <div class="private-error">
+            {{ error }}
+        </div>
+
+        {% endif %}
+
+        <form
+            method="POST"
+            action="{{ url_for('private.unlock') }}"
+        >
+
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter our password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="btn private-enter-btn"
+            >
+                Unlock Our Memories ❤️
+            </button>
+
+        </form>
+
+        <div class="unlock-bottom">
+            Only you & me
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

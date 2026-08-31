@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Our Shayari - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 950px;">
+    <div class="section-title">
+        <div class="eyebrow">expressed in verses</div>
+        <h2>Romantic Shayari ❤️</h2>
+    </div>
+
+    {% if session.get('logged_in') %}
+    <div style="text-align: center; margin-bottom: 45px;">
+        <a href="{{ url_for('shayari.add_shayari') }}" class="btn">
+            ✍️ Add a Shayari
+        </a>
+    </div>
+    {% endif %}
+
+    {% if shayaris %}
+    <div style="display: flex; flex-direction: column; gap: 35px;">
+        {% for s in shayaris %}
+        <article class="card" style="padding: 40px; text-align: center; background: rgba(255, 255, 255, 0.85); position: relative;">
+            <div class="quote-mark" style="font-family: Georgia, serif; font-size: 60px; color: var(--rose); line-height: 1; margin-bottom: -10px;">❝</div>
+            
+            {% if s.title %}
+            <h3 style="font-size: 26px; margin: 0 0 15px; color: var(--deep);">{{ s.title }}</h3>
+            {% endif %}
+
+            {% if s.image %}
+            <div style="margin: 0 auto 20px; max-width: 500px; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow-small); background: #fff8fa;">
+                <img src="/media/photos/public/{{ s.image }}" alt="{{ s.title or 'Shayari image' }}" style="width: 100%; max-height: 300px; object-fit: contain; display: block;">
+            </div>
+            {% endif %}
+
+            <p style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; line-height: 1.6; font-style: italic; color: var(--deep); margin: 0 0 20px; white-space: pre-line;">
+                {{ s.body }}
+            </p>
+
+            <div style="color: var(--rose); font-size: 20px;">───── ♥ ─────</div>
+            {% if s.created_at %}
+            <span style="font-size: 11px; color: var(--deep-soft); opacity: 0.6; display: block; margin-top: 15px;">
+                Added on {{ s.created_at.strftime('%B %d, %Y') }}
+            </span>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty">
+        <div class="empty-heart">💖</div>
+        <h3>No Shayari added yet...</h3>
+        <p>Log in as admin to add Urdu/Hindi verses directly from your phone!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

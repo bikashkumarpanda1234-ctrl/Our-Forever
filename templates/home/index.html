@@ -1,0 +1,678 @@
+{% extends "base.html" %}
+
+{% block title %}Our Forever ❤️ - Memory Journey{% endblock %}
+
+{% block content %}
+<div class="home-page">
+
+    <!-- 1. HERO SECTION -->
+    <section class="home-hero">
+        <div class="hero-content">
+            <div class="eyebrow">TWO HEARTS · ONE STORY</div>
+            <h1>
+                Somewhere between<br>
+                <em>you</em> and me,<br>
+                we became <em>us.</em>
+            </h1>
+            <p class="hero-description">
+                Every picture holds a moment. Every moment holds a feeling. Scroll through our long journey of love and cherish every memory together. ❤️
+            </p>
+            <div class="hero-buttons">
+                <a href="#chapter-1" class="btn">Start Scrolling 🌸</a>
+                <a href="{{ url_for('letters.letters') }}" class="btn alt">Read Letters 💌</a>
+            </div>
+        </div>
+
+        <div class="hero-photo">
+            {% if memories %}
+            <div class="hero-photo-frame" style="position: relative; height: 560px; overflow: hidden; transform: rotate(1deg);">
+                {% for m in memories[:5] %}
+                <div class="hero-slide {% if loop.first %}active{% endif %}">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}">
+                    <div class="hero-photo-caption">
+                        <span>♥</span> {{ m.title }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="hero-photo-frame">
+                <div class="hero-placeholder">
+                    <span>♥</span>
+                    <p>Our beautiful memories will appear here.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- RELATIONSHIP COUNTER WIDGET -->
+    <section class="love-counter-section fade-up" style="max-width: 850px; margin: -40px auto 70px; text-align: center; z-index: 10; position: relative;">
+        <div class="card" style="background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(15px); border-radius: 30px; padding: 32px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: 0 15px 40px rgba(90, 35, 55, 0.1);">
+            <div style="font-size: 32px; margin-bottom: 8px; animation: heartBeat 2s infinite; display: inline-block;">💖</div>
+            <h3 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; margin: 0 0 6px; color: var(--deep); font-weight: 700;">Together Since May 20, 2023</h3>
+            <p style="font-size: 14px; color: var(--deep-soft); margin: 0 0 20px;">Our love story began on this special day — counting every moment together.</p>
+            
+            <div id="counter-grid" style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+                <div class="counter-box" style="background: rgba(239, 200, 211, 0.25); padding: 14px 18px; border-radius: 18px; min-width: 82px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small);">
+                    <div id="years-val" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600; letter-spacing: 1px; margin-top: 4px;">Years</div>
+                </div>
+                <div class="counter-box" style="background: rgba(239, 200, 211, 0.25); padding: 14px 18px; border-radius: 18px; min-width: 82px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small);">
+                    <div id="months-val" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600; letter-spacing: 1px; margin-top: 4px;">Months</div>
+                </div>
+                <div class="counter-box" style="background: rgba(239, 200, 211, 0.25); padding: 14px 18px; border-radius: 18px; min-width: 82px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small);">
+                    <div id="days-val" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600; letter-spacing: 1px; margin-top: 4px;">Days</div>
+                </div>
+                <div class="counter-box" style="background: rgba(239, 200, 211, 0.25); padding: 14px 18px; border-radius: 18px; min-width: 82px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small);">
+                    <div id="hours-val" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600; letter-spacing: 1px; margin-top: 4px;">Hours</div>
+                </div>
+                <div class="counter-box" style="background: rgba(239, 200, 211, 0.25); padding: 14px 18px; border-radius: 18px; min-width: 82px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small);">
+                    <div id="mins-val" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600; letter-spacing: 1px; margin-top: 4px;">Mins</div>
+                </div>
+                <div class="counter-box" style="background: rgba(239, 200, 211, 0.25); padding: 14px 18px; border-radius: 18px; min-width: 82px; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small);">
+                    <div id="secs-val" style="font-size: 30px; font-weight: 700; color: var(--rose);">00</div>
+                    <div style="font-size: 11px; text-transform: uppercase; color: var(--deep-soft); font-weight: 600; letter-spacing: 1px; margin-top: 4px;">Secs</div>
+                </div>
+            </div>
+            
+            <p style="font-size: 13px; color: var(--deep-soft); margin-top: 20px; font-style: italic; margin-bottom: 0;">"Every second spent with you is a second of absolute bliss."</p>
+        </div>
+    </section>
+
+    <!-- 2. INTRO SECTION -->
+    <section class="home-intro">
+        <div class="chapter-badge">OUR MEMORY VAULT</div>
+        <h2>A Story Written in Sweet Pictures</h2>
+        <p>
+            Scroll down to view our full collection of romantic memories. Click on any picture to view it in full screen! 🌸
+        </p>
+    </section>
+
+    <!-- 3. PUBLIC MEMORIES CHAPTER 1 (1-9) -->
+    <section id="chapter-1" class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">CHAPTER ONE</div>
+                <h2>The First Spark & Sweet Smiles ✨</h2>
+            </div>
+            <span class="memory-count">01 - 09 of {{ memories|length }}</span>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for m in memories[:9] %}
+            <article class="home-memory-card" onclick="openLightbox({{ loop.index0 }})" style="cursor: pointer;">
+                <div class="home-memory-image">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                    <div class="memory-number">{{ "%02d"|format(loop.index) }}</div>
+                    <div class="memory-heart">♥</div>
+                </div>
+                <div class="home-memory-content">
+                    <h3>{{ m.title }}</h3>
+                    <p>{{ m.description or "A moment that deserves a place in our forever." }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 4. SHAYARI BREAK 1 -->
+    {% if shayaris %}
+    <section class="home-shayari-section">
+        <div class="big-shayari">
+            <div class="shayari-symbol">❝</div>
+            <p>{{ shayaris[0].body }}</p>
+            <div class="shayari-line">───── ♥ ─────</div>
+            {% if shayaris[0].title %}
+            <small style="display:block; margin-top:10px; color: var(--rose);">— {{ shayaris[0].title }}</small>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 5. PUBLIC MEMORIES CHAPTER 2 (10-18) -->
+    {% if memories|length > 9 %}
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">CHAPTER TWO</div>
+                <h2>Growing Closer Day by Day 🌅</h2>
+            </div>
+            <span class="memory-count">10 - 18 of {{ memories|length }}</span>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for m in memories[9:18] %}
+            <article class="home-memory-card polaroid-card" onclick="openLightbox({{ loop.index0 + 9 }})" style="cursor: pointer;">
+                <div class="home-memory-image">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                    <div class="memory-number">{{ "%02d"|format(loop.index + 9) }}</div>
+                    <div class="memory-heart">♥</div>
+                </div>
+                <div class="home-memory-content">
+                    <h3>{{ m.title }}</h3>
+                    <p>{{ m.description or "Growing closer with every shared smile." }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 6. HORIZONTAL REEL CAROUSEL (19-27) -->
+    {% if memories|length > 18 %}
+    <section class="home-memories" style="background: rgba(255, 240, 244, 0.4); border-radius: 35px; padding: 40px 25px; margin: 40px auto; max-width: 1250px;">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">SWIPE MEMORY REEL</div>
+                <h2>Highlights Horizontal Carousel 🎡</h2>
+            </div>
+            <div style="font-size: 13px; color: var(--rose); font-weight: 600;">Swipe or scroll side-to-side 👉</div>
+        </div>
+
+        <div class="memory-reel-track">
+            {% for m in memories[18:27] %}
+            <div class="reel-card" onclick="openLightbox({{ loop.index0 + 18 }})">
+                <div class="reel-card-img">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                </div>
+                <h4>{{ m.title }}</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 7. SHAYARI BREAK 2 -->
+    {% if shayaris|length > 1 %}
+    <section class="home-shayari-section">
+        <div class="big-shayari">
+            <div class="shayari-symbol">❝</div>
+            <p>{{ shayaris[1].body }}</p>
+            <div class="shayari-line">───── ♥ ─────</div>
+            {% if shayaris[1].title %}
+            <small style="display:block; margin-top:10px; color: var(--rose);">— {{ shayaris[1].title }}</small>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 8. PUBLIC MEMORIES CHAPTER 3 (28-36) -->
+    {% if memories|length > 27 %}
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">CHAPTER THREE</div>
+                <h2>Cozy Selfies & Festivals 😄</h2>
+            </div>
+            <span class="memory-count">28 - 36 of {{ memories|length }}</span>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for m in memories[27:36] %}
+            <article class="home-memory-card" onclick="openLightbox({{ loop.index0 + 27 }})" style="cursor: pointer;">
+                <div class="home-memory-image">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                    <div class="memory-number">{{ "%02d"|format(loop.index + 27) }}</div>
+                    <div class="memory-heart">♥</div>
+                </div>
+                <div class="home-memory-content">
+                    <h3>{{ m.title }}</h3>
+                    <p>{{ m.description or "Beautiful moments celebrating us." }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- FEATURED HD CINEMA VIDEO SPOTLIGHT -->
+    <section class="home-memories" style="max-width: 1000px; margin: 50px auto 70px;">
+        <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fff0f4 100%); border-radius: 35px; padding: 35px; border: 1px solid rgba(255, 182, 193, 0.5); box-shadow: 0 20px 60px rgba(200, 90, 120, 0.18); text-align: center;">
+            <div class="chapter-badge" style="background: rgba(200, 90, 120, 0.15); color: var(--rose); font-size: 12px; padding: 8px 20px; border-radius: 30px; letter-spacing: 2px;">
+                ⭐ FEATURED HD CINEMA MEMORY ⭐
+            </div>
+            <h2 style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(32px, 4vw, 48px); margin: 15px 0 10px; color: var(--deep); font-weight: 700;">
+                Fun & Silly Times 🌺
+            </h2>
+            <p style="font-size: 15px; color: var(--deep-soft); max-width: 650px; margin: 0 auto 25px; line-height: 1.8;">
+                Our absolute favorite video capturing pure happiness, silly laughs, and magical moments together. Press play to experience our joy in crisp HD! 🎬✨
+            </p>
+            
+            <div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #0c0508; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 255, 255, 0.9);">
+                <video src="/media/videos/public/baby6.mp4" controls preload="metadata" playsinline webkit-playsinline style="width: 100%; max-height: 520px; object-fit: contain; display: block; background: #0c0508;"></video>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 13px; color: var(--rose); font-weight: 600; font-style: italic;">
+                "Every second of your laugh is my favorite melody." ❤️
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. VIDEOS PREVIEW -->
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">CAPTURED MOMENTS IN MOTION</div>
+                <h2>Our Shared Videos 🎬 ({{ videos|length }})</h2>
+            </div>
+            <a href="{{ url_for('videos.videos') }}" class="btn alt">View All Videos 🎥</a>
+        </div>
+
+        {% if videos %}
+        <div class="home-photo-grid">
+            {% for v in videos %}
+            <article class="home-memory-card" style="padding: 14px; background: #ffffff; cursor: pointer;" onclick="openVideoLightbox('/media/videos/public/{{ v.path }}', {{ v.title|tojson }}, {{ (v.description or '')|tojson }})">
+                <div class="home-memory-image" style="height: 240px; border-radius: 18px; overflow: hidden; background: #11080c; position: relative; display: flex; align-items: center; justify-content: center;">
+                    <video src="/media/videos/public/{{ v.path }}#t=0.5" preload="metadata" playsinline webkit-playsinline style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
+                    <div style="position: absolute; width: 55px; height: 55px; background: rgba(255,255,255,0.85); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--rose); box-shadow: 0 6px 20px rgba(0,0,0,0.3);">▶</div>
+                </div>
+                <div class="home-memory-content" style="padding: 12px 10px 8px;">
+                    <h3 style="font-size: 22px; margin: 0 0 4px;">{{ v.title }}</h3>
+                    <p style="font-size: 13px; color: var(--deep-soft); margin: 0;">{{ v.description or "A sweet video capturing our moments." }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="home-empty">
+            <p>No public videos uploaded yet. 🎬</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- 10. MUSIC PREVIEW -->
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">SOUNDTRACK OF US</div>
+                <h2>Our Music Playlist 🎵</h2>
+            </div>
+            <a href="{{ url_for('music.music') }}" class="btn alt">View Playlist</a>
+        </div>
+
+        {% if tracks %}
+        <div class="home-photo-grid">
+            {% for t in tracks %}
+            <article class="home-memory-card" style="padding: 15px;">
+                <div class="music-card-content" style="text-align: center;">
+                    {% if t.cover %}
+                    <img src="/media/music/covers/{{ t.cover }}" alt="{{ t.title }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; box-shadow: var(--shadow-small);">
+                    {% else %}
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--rose-light); color: var(--rose); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 30px;">🎶</div>
+                    {% endif %}
+                    <h3 style="font-size: 20px; margin: 5px 0;">{{ t.title }}</h3>
+                    <p style="font-size: 13px; color: var(--deep-soft); margin-bottom: 15px;">{{ t.artist }}</p>
+                    <audio src="/media/music/{{ t.file }}" controls style="width: 100%; max-width: 250px;"></audio>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="home-empty">
+            <p>Every love story needs a soundtrack. Add songs from your phone! 🎶</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- 11. PUBLIC MEMORIES CHAPTER 4 (37-45) -->
+    {% if memories|length > 36 %}
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">CHAPTER FOUR</div>
+                <h2>Beach Days & Outdoor Adventures 🏖️</h2>
+            </div>
+            <span class="memory-count">37 - 45 of {{ memories|length }}</span>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for m in memories[36:45] %}
+            <article class="home-memory-card polaroid-card" onclick="openLightbox({{ loop.index0 + 36 }})" style="cursor: pointer;">
+                <div class="home-memory-image">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                    <div class="memory-number">{{ "%02d"|format(loop.index + 36) }}</div>
+                    <div class="memory-heart">♥</div>
+                </div>
+                <div class="home-memory-content">
+                    <h3>{{ m.title }}</h3>
+                    <p>{{ m.description or "Walking hand in hand toward our next adventure." }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 12. JOURNEY PREVIEW -->
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">MILESTONES</div>
+                <h2>Our Journey Preview 🕰️</h2>
+            </div>
+            <a href="{{ url_for('timeline.timeline') }}" class="btn alt">See Full Journey</a>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for event in timeline %}
+            <article class="home-memory-card">
+                {% if event.image %}
+                <div class="home-memory-image" style="height: 200px;">
+                    <img src="/media/photos/public/{{ event.image }}" alt="{{ event.title }}" style="object-fit: cover; width: 100%; height: 100%;">
+                </div>
+                {% endif %}
+                <div class="home-memory-content">
+                    <small style="color: var(--rose); font-weight: 600;">{{ event.date }}</small>
+                    <h3 style="margin: 5px 0;">{{ event.title }}</h3>
+                    <p>{{ event.description }}</p>
+                </div>
+            </article>
+            {% else %}
+            <div class="home-empty" style="grid-column: span 3;">
+                <p>No journey events created yet. ❤️</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 13. LETTERS PREVIEW -->
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">WRITTEN WORDS</div>
+                <h2>From My Heart 💌</h2>
+            </div>
+            <a href="{{ url_for('letters.letters') }}" class="btn alt">Read All Letters</a>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for l in letters %}
+            <article class="home-memory-card">
+                <div class="home-memory-content">
+                    <h3 style="margin: 5px 0;">{{ l.title }}</h3>
+                    <p>{{ l.body[:120] }}...</p>
+                    <a href="{{ url_for('letters.letter', letter_id=l.id) }}" style="color: var(--rose); text-decoration: none; font-weight: 600; display: inline-block; margin-top: 10px;">Read Letter →</a>
+                </div>
+            </article>
+            {% else %}
+            <div class="home-empty" style="grid-column: span 3;">
+                <p>No letters written yet. 💌</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 14. PUBLIC MEMORIES CHAPTER 5 (46 to End) -->
+    {% if memories|length > 45 %}
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">CHAPTER FIVE</div>
+                <h2>Towards Our Forever ❤️</h2>
+            </div>
+            <span class="memory-count">46 - {{ memories|length }} of {{ memories|length }}</span>
+        </div>
+
+        <div class="home-photo-grid">
+            {% for m in memories[45:] %}
+            <article class="home-memory-card" onclick="openLightbox({{ loop.index0 + 45 }})" style="cursor: pointer;">
+                <div class="home-memory-image">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                    <div class="memory-number">{{ "%02d"|format(loop.index + 45) }}</div>
+                    <div class="memory-heart">♥</div>
+                </div>
+                <div class="home-memory-content">
+                    <h3>{{ m.title }}</h3>
+                    <p>{{ m.description or "Forever and always yours." }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- 15. INTERACTIVE FUN & SURPRISES -->
+    <section class="home-memories">
+        <div class="home-section-heading">
+            <div>
+                <div class="chapter-badge">FUN & ROMANCE</div>
+                <h2>Interactive Surprises ✨</h2>
+            </div>
+        </div>
+
+        <div class="home-photo-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+            <article class="home-memory-card" style="padding: 25px; text-align: center;">
+                <div style="font-size: 45px; margin-bottom: 10px;">🎡</div>
+                <h3 style="font-size: 20px; margin-bottom: 8px;">Date Idea Wheel</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); margin-bottom: 20px;">Can't decide what to do? Spin the wheel for date surprises! 💖</p>
+                <a href="{{ url_for('extras.wheel') }}" class="btn" style="padding: 8px 20px; font-size: 13px;">Spin Wheel 🎡</a>
+            </article>
+
+            <article class="home-memory-card" style="padding: 25px; text-align: center;">
+                <div style="font-size: 45px; margin-bottom: 10px;">💖</div>
+                <h3 style="font-size: 20px; margin-bottom: 8px;">Reasons Why I Love You</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); margin-bottom: 20px;">Tap interactive love cards to reveal sweet romantic notes. 💌</p>
+                <a href="{{ url_for('extras.reasons') }}" class="btn" style="padding: 8px 20px; font-size: 13px;">Read Reasons 💖</a>
+            </article>
+
+            <article class="home-memory-card" style="padding: 25px; text-align: center;">
+                <div style="font-size: 45px; margin-bottom: 10px;">🌟</div>
+                <h3 style="font-size: 20px; margin-bottom: 8px;">Couple Bucket List</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); margin-bottom: 20px;">Track your shared dreams, travel goals, and milestones! ✈️</p>
+                <a href="{{ url_for('extras.bucketlist') }}" class="btn" style="padding: 8px 20px; font-size: 13px;">View Bucket List 🌟</a>
+            </article>
+        </div>
+    </section>
+
+    <!-- 16. PRIVATE MEMORIES SECTION -->
+    <section class="home-private">
+        <div class="private-decoration">🔐</div>
+        <div class="chapter-badge">JUST BETWEEN US</div>
+        <h2>Some memories are meant to stay private.</h2>
+        <p>A special little corner for the memories that belong only to us.</p>
+        <a href="{{ url_for('private.unlock') }}" class="btn">Enter Our Secret Place 🔐</a>
+    </section>
+
+    <!-- 17. FINAL ROMANTIC SECTION -->
+    <section class="home-final">
+        <div class="final-hearts">♥　♡　♥</div>
+        <h2>Wherever life takes us,<br>I hope it always brings me<br>back to you.</h2>
+        <p>Our story is still being written...</p>
+        <div class="final-signature">Forever yours ❤️</div>
+    </section>
+
+</div>
+
+<!-- LIGHTBOX MODAL ELEMENT -->
+<div id="lightbox-modal" class="lightbox-modal" onclick="closeLightboxOnBackdrop(event)">
+    <div class="lightbox-content">
+        <div class="lightbox-close" onclick="closeLightbox()">✕</div>
+        <div class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</div>
+        <div class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</div>
+        <div class="lightbox-img-wrapper">
+            <img id="lightbox-img" src="" alt="Memory preview">
+        </div>
+        <div class="lightbox-caption">
+            <h3 id="lightbox-title">Memory Title</h3>
+            <p id="lightbox-desc">Memory Description</p>
+        </div>
+    </div>
+</div>
+
+<!-- FLOATING BACK TO TOP HEART BUTTON -->
+<div id="back-to-top" class="back-to-top" onclick="scrollToTop()">
+    ♥
+</div>
+
+<!-- LIGHTBOX & HERO SLIDESHOW JAVASCRIPT -->
+<script>
+    const allMemories = [
+        {% for m in memories %}
+        {
+            image: "/media/photos/public/{{ m.image }}",
+            title: {{ m.title|tojson }},
+            description: {{ (m.description or "A moment that deserves a place in our forever.")|tojson }}
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    let currentLightboxIndex = 0;
+
+    function openLightbox(index) {
+        if (index < 0 || index >= allMemories.length) return;
+        currentLightboxIndex = index;
+        const memory = allMemories[index];
+        document.getElementById("lightbox-img").src = memory.image;
+        document.getElementById("lightbox-title").textContent = memory.title;
+        document.getElementById("lightbox-desc").textContent = memory.description;
+        document.getElementById("lightbox-modal").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+        document.getElementById("lightbox-modal").classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+
+    function closeLightboxOnBackdrop(e) {
+        if (e.target.id === "lightbox-modal") {
+            closeLightbox();
+        }
+    }
+
+    function navigateLightbox(dir) {
+        let newIndex = currentLightboxIndex + dir;
+        if (newIndex < 0) newIndex = allMemories.length - 1;
+        if (newIndex >= allMemories.length) newIndex = 0;
+        openLightbox(newIndex);
+    }
+
+    // Keyboard controls for lightbox
+    document.addEventListener("keydown", function(e) {
+        const modal = document.getElementById("lightbox-modal");
+        if (modal.classList.contains("active")) {
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowLeft") navigateLightbox(-1);
+            if (e.key === "ArrowRight") navigateLightbox(1);
+        }
+    });
+
+    // Back to top floating button visibility
+    window.addEventListener("scroll", function() {
+        const btn = document.getElementById("back-to-top");
+        if (window.scrollY > 450) {
+            btn.classList.add("visible");
+        } else {
+            btn.classList.remove("visible");
+        }
+    });
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Hero slideshow transition
+    document.addEventListener("DOMContentLoaded", function() {
+        const slides = document.querySelectorAll(".hero-slide");
+        if (slides.length > 1) {
+            let currentSlide = 0;
+            setInterval(function() {
+                slides[currentSlide].classList.remove("active");
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add("active");
+            }, 4500);
+        }
+
+        // Relationship Counter calculation
+        const startDate = new Date("2023-05-20T00:00:00");
+        function updateCounter() {
+            const now = new Date();
+            let years = now.getFullYear() - startDate.getFullYear();
+            let months = now.getMonth() - startDate.getMonth();
+            let days = now.getDate() - startDate.getDate();
+            let hours = now.getHours() - startDate.getHours();
+            let minutes = now.getMinutes() - startDate.getMinutes();
+            let seconds = now.getSeconds() - startDate.getSeconds();
+
+            if (seconds < 0) { minutes--; seconds += 60; }
+            if (minutes < 0) { hours--; minutes += 60; }
+            if (hours < 0) { days--; hours += 24; }
+            if (days < 0) {
+                months--;
+                const prevMonthDays = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+                days += prevMonthDays;
+            }
+            if (months < 0) { years--; months += 12; }
+            
+            const yearsEl = document.getElementById("years-val");
+            const monthsEl = document.getElementById("months-val");
+            const daysEl = document.getElementById("days-val");
+            const hoursEl = document.getElementById("hours-val");
+            const minsEl = document.getElementById("mins-val");
+            const secsEl = document.getElementById("secs-val");
+            
+            if (yearsEl) yearsEl.textContent = String(years).padStart(2, '0');
+            if (monthsEl) monthsEl.textContent = String(months).padStart(2, '0');
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minsEl) minsEl.textContent = String(minutes).padStart(2, '0');
+            if (secsEl) secsEl.textContent = String(seconds).padStart(2, '0');
+        }
+        
+        updateCounter();
+        setInterval(updateCounter, 1000);
+    });
+</script>
+<!-- FULLSCREEN VIDEO LIGHTBOX MODAL FOR HOME PAGE -->
+<div id="video-lightbox-modal" class="video-lightbox-modal" onclick="closeVideoLightboxOnBackdrop(event)">
+    <div class="video-lightbox-container">
+        <div class="video-lightbox-close" onclick="closeVideoLightbox()">✕</div>
+        <div class="video-lightbox-player-wrapper">
+            <video id="video-lightbox-player" controls playsinline webkit-playsinline></video>
+        </div>
+        <div class="video-lightbox-info">
+            <h3 id="video-lightbox-title" style="font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 0 0 6px; color: var(--rose);">Video Title</h3>
+            <p id="video-lightbox-desc" style="margin: 0; color: #ffebf0; font-size: 14px;">Video Description</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openVideoLightbox(videoUrl, title, desc) {
+        const player = document.getElementById("video-lightbox-player");
+        player.src = videoUrl;
+        document.getElementById("video-lightbox-title").textContent = title;
+        document.getElementById("video-lightbox-desc").textContent = desc || "";
+        document.getElementById("video-lightbox-modal").classList.add("active");
+        document.body.style.overflow = "hidden";
+        player.play().catch(err => console.log("Video playback ready", err));
+    }
+
+    function closeVideoLightbox() {
+        const player = document.getElementById("video-lightbox-player");
+        player.pause();
+        player.currentTime = 0;
+        player.src = "";
+        document.getElementById("video-lightbox-modal").classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+
+    function closeVideoLightboxOnBackdrop(e) {
+        if (e.target.id === "video-lightbox-modal") {
+            closeVideoLightbox();
+        }
+    }
+
+    document.addEventListener("keydown", function(e) {
+        const modal = document.getElementById("video-lightbox-modal");
+        if (modal && modal.classList.contains("active")) {
+            if (e.key === "Escape") closeVideoLightbox();
+        }
+    });
+</script>
+{% endblock %}

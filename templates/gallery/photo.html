@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ memory.title }} - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 850px;">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('gallery.gallery') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Memories
+        </a>
+    </div>
+
+    <div class="photo-frame" style="transform: none; margin-bottom: 30px;">
+        <img style="width:100%; max-height: 600px; object-fit: contain; background: #fff8fa; border-radius: 20px;" src="/media/photos/public/{{ memory.image }}" alt="{{ memory.title }}">
+    </div>
+
+    <h1 style="font-size: clamp(32px, 4vw, 48px); margin: 0 0 10px;">{{ memory.title }}</h1>
+    
+    {% if memory.created_at %}
+    <span style="color: var(--rose); font-weight: 500; display: block; margin-bottom: 20px;">
+        ♥ {{ memory.created_at.strftime('%B %d, %Y') }}
+    </span>
+    {% endif %}
+
+    <p style="font-size: 16px; line-height: 1.8; color: var(--deep-soft); white-space: pre-line;">
+        {{ memory.description }}
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Place 🔐{% endblock %}
+
+{% block extra_css %}
+<style>
+    .secret-dashboard-page {
+        padding: 40px 20px;
+        max-width: 1000px;
+        margin: 0 auto;
+        font-family: 'Poppins', sans-serif;
+        position: relative;
+        isolation: isolate;
+    }
+    .secret-header {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInDown 1s ease-out;
+        position: relative;
+    }
+    .secret-lock {
+        width: 92px;
+        height: 92px;
+        display: grid;
+        place-items: center;
+        margin: 0 auto 16px;
+        font-size: 45px;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #fff8fa, #f6d7e1);
+        border: 1px solid rgba(200, 90, 120, .2);
+        box-shadow: 0 15px 30px rgba(136, 51, 80, .14);
+        animation: heartBeat 2s infinite;
+    }
+    .secret-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 45px;
+        color: #5a3040;
+        margin: 10px 0;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .secret-subtitle {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-style: italic;
+        color: #8c586c;
+        margin-top: 5px;
+    }
+    .secret-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+    .secret-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, .94), rgba(255, 247, 249, .78));
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 182, 193, 0.4);
+        border-radius: 24px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 10px 35px rgba(239, 200, 211, 0.35);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 224px;
+    }
+    .secret-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(239, 200, 211, 0.55);
+        border-color: rgba(255, 182, 193, 0.8);
+    }
+    .secret-card .btn { box-shadow: 0 7px 16px rgba(185, 64, 100, .15); }
+    .secret-icon {
+        font-size: 45px;
+        margin-bottom: 5px;
+    }
+    .secret-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #5a3040;
+        margin: 5px 0;
+    }
+    .secret-count {
+        font-size: 14px;
+        color: #8c586c;
+        margin-bottom: 15px;
+        background: rgba(239, 200, 211, 0.25);
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 500;
+    }
+    .secret-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 15px;
+        max-width: 900px;
+        margin: 0 auto 50px;
+        background: linear-gradient(145deg, rgba(255, 255, 255, .82), rgba(255, 245, 248, .65));
+        border-radius: 24px;
+        padding: 25px;
+        box-shadow: var(--shadow-small);
+        border: 1px dashed rgba(255, 182, 193, 0.6);
+    }
+    .action-btn {
+        padding: 12px 10px;
+        font-size: 13px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        text-decoration: none;
+        border-radius: 16px;
+        transition: all 0.3s ease;
+    }
+    .lock-area {
+        text-align: center;
+        margin-top: 30px;
+    }
+    .secret-dashboard-page::before,
+    .secret-dashboard-page::after {
+        content: "♥";
+        position: absolute;
+        z-index: -1;
+        color: rgba(200, 90, 120, .1);
+        font: 140px Georgia, serif;
+        pointer-events: none;
+    }
+    .secret-dashboard-page::before { top: 70px; left: -35px; transform: rotate(-12deg); }
+    .secret-dashboard-page::after { right: -25px; bottom: 75px; transform: rotate(15deg); }
+    
+    @keyframes heartBeat {
+        0% { transform: scale(1); }
+        14% { transform: scale(1.1); }
+        28% { transform: scale(1); }
+        42% { transform: scale(1.1); }
+        70% { transform: scale(1); }
+    }
+    @media (max-width: 560px) {
+        .secret-dashboard-page { padding: 28px 16px; }
+        .secret-grid { gap: 18px; }
+        .secret-card { height: 210px; padding: 24px; }
+        .secret-header h1 { font-size: 38px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="secret-dashboard-page">
+
+    <!-- HEADER -->
+    <header class="secret-header">
+        <div class="secret-lock">🔐</div>
+        <h1>Our Secret Place</h1>
+        <p class="secret-subtitle">"Some memories are only meant for us."</p>
+    </header>
+
+    <!-- MAIN SECTIONS GRID -->
+    <div class="secret-grid">
+        <!-- PHOTOS -->
+        <article class="secret-card">
+            <div>
+                <div class="secret-icon">📸</div>
+                <h3 class="secret-title">Private Photos</h3>
+                <span class="secret-count">{{ photo_count }} Photos</span>
+            </div>
+            <a href="{{ url_for('private.private_gallery') }}" class="btn" style="width: 100%; padding: 8px;">Open Gallery</a>
+        </article>
+
+        <!-- VIDEOS -->
+        <article class="secret-card">
+            <div>
+                <div class="secret-icon">🎥</div>
+                <h3 class="secret-title">Private Videos</h3>
+                <span class="secret-count">{{ video_count }} Videos</span>
+            </div>
+            <a href="{{ url_for('private.private_videos') }}" class="btn" style="width: 100%; padding: 8px;">Open Videos</a>
+        </article>
+
+        <!-- DATE WHEEL -->
+        <article class="secret-card">
+            <div>
+                <div class="secret-icon">🎡</div>
+                <h3 class="secret-title">Date Idea Wheel</h3>
+                <span class="secret-count">🔒 Timer & Spin</span>
+            </div>
+            <a href="{{ url_for('extras.wheel') }}" class="btn" style="width: 100%; padding: 8px;">Open Date Wheel 🎡</a>
+        </article>
+
+    </div>
+
+    <!-- PHONE-FIRST ADD SHORTCUTS -->
+    <h3 style="text-align: center; color: var(--deep); margin-bottom: 20px; font-weight: 600;">🛠️ Add Secret Content from Phone</h3>
+    <section class="secret-actions">
+        <a href="{{ url_for('admin.add_memory', private='true') }}" class="btn alt action-btn">
+            <span style="font-size: 24px;">📸</span> + Add Photo
+        </a>
+        <a href="{{ url_for('videos.add_video', private='true') }}" class="btn alt action-btn">
+            <span style="font-size: 24px;">🎥</span> + Add Video
+        </a>
+    </section>
+
+    <!-- LOCK / LOGOUT BUTTON -->
+    <div class="lock-area">
+        <a href="{{ url_for('private.lock') }}" class="btn" style="background: var(--deep); border-color: var(--deep); font-size: 15px; padding: 12px 30px; letter-spacing: 0.5px;">
+            🔒 Lock Secret Place
+        </a>
+    </div>
+
+</div>
+{% endblock %}

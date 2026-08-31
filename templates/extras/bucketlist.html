@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Our Couple Bucket List - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; padding: 40px 20px;">
+    <div class="section-title" style="text-align: center;">
+        <div class="eyebrow">DREAMS TOGETHER</div>
+        <h2>Our Couple Bucket List 🌟</h2>
+        <p style="color: var(--deep-soft); font-size: 15px;">Adventures, dreams, and sweet moments we want to experience together. 💕</p>
+    </div>
+
+    <!-- PROGRESS CARD -->
+    <div class="card" style="padding: 25px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px); border-radius: 24px; margin-bottom: 35px; box-shadow: 0 10px 30px rgba(90, 35, 55, 0.08);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-weight: 700; color: var(--deep); font-size: 16px;">Our Completed Dreams</span>
+            <span style="font-weight: 700; color: var(--rose); font-size: 16px;">{{ completed_count }} / {{ total_count }} ({{ progress_percent }}%)</span>
+        </div>
+        <!-- PROGRESS BAR -->
+        <div style="width: 100%; height: 14px; background: rgba(239, 200, 211, 0.3); border-radius: 10px; overflow: hidden; position: relative;">
+            <div style="width: {{ progress_percent }}%; height: 100%; background: linear-gradient(90deg, #ff8fa3, #ff4d6d); border-radius: 10px; transition: width 0.8s ease;"></div>
+        </div>
+    </div>
+
+    <!-- ADD ITEM FORM -->
+    <div class="card" style="padding: 20px; border-radius: 20px; margin-bottom: 30px; background: white;">
+        <form action="{{ url_for('extras.add_bucketlist') }}" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" name="title" placeholder="+ Add a new dream (e.g. Watch sunset at beach 🌅)" style="flex: 1; min-width: 220px; padding: 12px 15px; border-radius: 12px; border: 1px solid #efc8d3; outline: none; font-size: 14px;" required>
+            <select name="category" style="padding: 12px; border-radius: 12px; border: 1px solid #efc8d3; background: white; font-size: 14px; color: var(--deep);">
+                <option value="Travel ✈️">Travel ✈️</option>
+                <option value="Romance 💖">Romance 💖</option>
+                <option value="Adventure 🎒">Adventure 🎒</option>
+                <option value="Milestones 💍">Milestones 💍</option>
+            </select>
+            <button type="submit" class="btn" style="padding: 12px 24px; font-size: 14px; white-space: nowrap;">Add Dream ✨</button>
+        </form>
+    </div>
+
+    <!-- BUCKET LIST ITEMS -->
+    {% if items %}
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for item in items %}
+        <div class="bucket-card" style="background: white; border-radius: 18px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255, 182, 193, 0.4); box-shadow: var(--shadow-small); transition: transform 0.2s ease;">
+            <div style="display: flex; align-items: center; gap: 15px; flex: 1;">
+                <input type="checkbox" onchange="toggleItem({{ item.id }}, this)" {% if item.is_completed %}checked{% endif %} style="width: 22px; height: 22px; accent-color: var(--rose); cursor: pointer;">
+                <div>
+                    <h4 style="margin: 0; font-size: 16px; color: var(--deep); {% if item.is_completed %}text-decoration: line-through; opacity: 0.6;{% endif %}">{{ item.title }}</h4>
+                    <small style="color: var(--deep-soft); font-size: 12px;">{{ item.category }}</small>
+                </div>
+            </div>
+            {% if item.is_completed %}
+            <span style="font-size: 20px;">✅</span>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty">
+        <p>No bucket list dreams added yet. Add your first dream above! 🌟</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleItem(itemId, checkbox) {
+    fetch('/extras/bucketlist/toggle/' + itemId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            window.location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}

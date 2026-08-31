@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Gift Memory - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin.gifts') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Gifts List
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Edit Gift Details 🎁</h2>
+        
+        <form method="POST">
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Gift Name</label>
+            <input type="text" name="title" value="{{ gift.title }}" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- GIVER CATEGORY -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Category</label>
+            <select name="giver" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; background: #fff;">
+                <option value="she_gave" {% if gift.giver == 'she_gave' %}selected{% endif %}>💝 Gift She Gave Me</option>
+                <option value="he_gave" {% if gift.giver == 'he_gave' %}selected{% endif %}>🎁 Gift I Gave Her</option>
+            </select>
+
+            <!-- DESCRIPTION -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Description</label>
+            <textarea name="description" rows="5" style="width: 100%; padding: 12px; margin-bottom: 30px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical;">{{ gift.description or "" }}</textarea>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Update Gift Memory
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

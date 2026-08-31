@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Memories - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-title">
+        <div class="eyebrow">our little universe</div>
+        <h2>Memories</h2>
+    </div>
+
+    {% if memories %}
+    <div class="grid">
+        {% for m in memories %}
+        <article class="card">
+            <a href="{{ url_for('gallery.photo', memory_id=m.id) }}">
+                <img class="gallery-img" src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}">
+            </a>
+            <h3>{{ m.title }}</h3>
+            {% if m.created_at %}
+            <small style="color: var(--rose); display: block; margin-bottom: 8px;">{{ m.created_at.strftime('%B %d, %Y') }}</small>
+            {% endif %}
+            <p>{{ m.description or "" }}</p>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty">
+        <div class="empty-heart">💝</div>
+        <h3>No public memories yet...</h3>
+        <p>Log in as admin to upload memories directly from your phone!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

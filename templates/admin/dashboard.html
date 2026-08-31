@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+    <div class="section-title">
+        <div class="eyebrow">memory management portal</div>
+        <h2>Admin Dashboard ❤️</h2>
+    </div>
+
+    <p style="text-align: center; margin-bottom: 45px; color: var(--deep-soft); font-size: 15px;">
+        Manage our shared memory website directly from your phone. Add, edit, or delete items instantly.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 50px;">
+        <!-- MEMORIES (PHOTOS) -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">📸 Memories</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Public Photos: {{ counts.public_photos }} | Private: {{ counts.private_photos }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('admin.add_memory') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.memories') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+
+        <!-- VIDEOS -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">🎬 Videos</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Public Videos: {{ counts.public_videos }} | Private: {{ counts.private_videos }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('videos.add_video') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.videos') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+
+        <!-- MUSIC -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">🎵 Music</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Public Songs: {{ counts.public_music }} | Private: {{ counts.private_music }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('music.add_music') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.music') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+
+        <!-- JOURNEY / TIMELINE -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">🕰️ Journey</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Journey Events: {{ counts.journey }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('timeline.add_timeline') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.timeline') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+
+        <!-- LETTERS -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">💌 Letters</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Public Letters: {{ counts.public_letters }} | Private: {{ counts.private_letters }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('letters.add_letter') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.letters') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+
+        <!-- SHAYARI -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">✍️ Shayari</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Public Shayari: {{ counts.public_shayari }} | Private: {{ counts.private_shayari }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('shayari.add_shayari') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.shayari') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+
+        <!-- GIFTS -->
+        <div class="card" style="padding: 25px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="font-size: 24px; margin-top: 0; color: var(--deep);">🎁 Gifts</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin-bottom: 20px;">
+                    Public Gifts: {{ counts.public_gifts }} | Private: {{ counts.private_gifts }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('gifts.add_gift') }}" class="btn" style="flex: 1; padding: 10px; font-size: 13px;">+ Add</a>
+                <a href="{{ url_for('admin.gifts') }}" class="btn alt" style="flex: 1; padding: 10px; font-size: 13px;">Manage</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

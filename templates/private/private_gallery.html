@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Place 🔐{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/private.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="private-page">
+
+    <!-- HEADER -->
+    <header class="private-header">
+        <span class="private-heart">💖</span>
+        <div class="eyebrow">OUR SECRET SPACE</div>
+        <h1>Our Private Memories</h1>
+        <p class="private-intro">
+            A safe place for the moments that belong only to us. No one else can see this. ❤️
+        </p>
+    </header>
+
+    <!-- UPLOAD SECTIONS -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 900px; margin: 0 auto 70px;">
+        <!-- PHOTO UPLOAD -->
+        <div class="card" style="padding: 25px; text-align: center; background: rgba(255, 255, 255, 0.9);">
+            <h3 style="font-size: 22px; margin-top: 0; color: var(--deep);">📷 Add Private Photo</h3>
+            <form action="{{ url_for('private.upload_private_photo') }}" method="POST" enctype="multipart/form-data">
+                <input type="file" name="photo" accept="image/*" style="width: 100%; margin-bottom: 15px;" required>
+                <input type="text" name="title" placeholder="Title (optional)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #efc8d3; border-radius: 8px; box-sizing: border-box;">
+                <textarea name="description" placeholder="Description (optional)" rows="2" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #efc8d3; border-radius: 8px; box-sizing: border-box; resize: vertical;"></textarea>
+                <button type="submit" class="btn" style="width: 100%; padding: 10px;">Save Secret Photo</button>
+            </form>
+        </div>
+
+        <!-- VIDEO UPLOAD -->
+        <div class="card" style="padding: 25px; text-align: center; background: rgba(255, 255, 255, 0.9);">
+            <h3 style="font-size: 22px; margin-top: 0; color: var(--deep);">🎬 Add Private Video</h3>
+            <form action="{{ url_for('private.upload_private_video') }}" method="POST" enctype="multipart/form-data">
+                <input type="file" name="video" accept="video/*" style="width: 100%; margin-bottom: 15px;" required>
+                <input type="text" name="title" placeholder="Title (optional)" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #efc8d3; border-radius: 8px; box-sizing: border-box;">
+                <textarea name="description" placeholder="Description (optional)" rows="2" style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #efc8d3; border-radius: 8px; box-sizing: border-box; resize: vertical;"></textarea>
+                <button type="submit" class="btn" style="width: 100%; padding: 10px;">Save Secret Video</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- QUICK UPLOADS DASHBOARD (FROM PHONE) -->
+    <section class="card" style="padding: 30px; background: rgba(255, 255, 255, 0.95); max-width: 900px; margin: 0 auto 60px; box-shadow: var(--shadow);">
+        <h3 style="font-size: 24px; margin-top: 0; text-align: center; color: var(--deep); display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <span>🛠️</span> Quick Upload Dashboard (From Phone)
+        </h3>
+        <p style="text-align: center; font-size: 13px; color: var(--deep-soft); margin-bottom: 25px;">
+            Tap any option below to instantly add new public content directly from your phone camera or library.
+        </p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
+            <a href="{{ url_for('admin.add_memory') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">📸</span> Add Photo Memory
+            </a>
+            <a href="{{ url_for('videos.add_video') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">🎥</span> Add Video
+            </a>
+            <a href="{{ url_for('music.add_music') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">🎵</span> Add Song
+            </a>
+            <a href="{{ url_for('timeline.add_timeline') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">🕰️</span> Add Journey Event
+            </a>
+            <a href="{{ url_for('letters.add_letter') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">💌</span> Write Letter
+            </a>
+            <a href="{{ url_for('shayari.add_shayari') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">✍️</span> Add Shayari
+            </a>
+            <a href="{{ url_for('gifts.add_gift') }}" class="btn alt" style="padding: 15px 10px; text-align: center; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none;">
+                <span style="font-size: 24px;">🎁</span> Add Gift Memory
+            </a>
+        </div>
+    </section>
+
+    <!-- PRIVATE PHOTOS GRID -->
+    <section class="private-memories">
+        <div class="section-title">
+            <span>✨</span>
+            <h2>Our Private Photos</h2>
+            <span>✨</span>
+        </div>
+
+        {% if memories %}
+        <div class="private-grid">
+            {% for m in memories %}
+            <article class="private-card">
+                <div class="private-photo">
+                    <img src="/media/photos/private/{{ m.image }}" alt="{{ m.title }}">
+                    <div class="photo-overlay">
+                        <span>❤️</span>
+                    </div>
+                </div>
+                <div class="private-card-content">
+                    <h3>{{ m.title }}</h3>
+                    <p>{{ m.description or "" }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-private" style="margin-bottom: 50px;">
+            <div class="empty-heart">💝</div>
+            <h3>Our secret photos are empty...</h3>
+            <p>Upload a private photo above to start saving secret moments!</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- PRIVATE VIDEOS GRID -->
+    <section class="private-memories">
+        <div class="section-title">
+            <span>✨</span>
+            <h2>Our Private Videos</h2>
+            <span>✨</span>
+        </div>
+
+        {% if videos %}
+        <div class="private-grid">
+            {% for v in videos %}
+            <article class="private-card">
+                <div class="private-photo" style="height: 200px; background: #000; display: flex; align-items: center; justify-content: center;">
+                    <video src="/media/videos/private/{{ v.path }}" controls style="width: 100%; height: 100%; object-fit: contain;"></video>
+                </div>
+                <div class="private-card-content">
+                    <h3>{{ v.title }}</h3>
+                    <p>{{ v.description or "" }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-private" style="margin-bottom: 50px;">
+            <div class="empty-heart">🎬</div>
+            <h3>Our secret videos are empty...</h3>
+            <p>Upload a private video above to start saving secret videos!</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- PRIVATE SHAYARI SECTION -->
+    <section class="shayari-section">
+        <div class="section-title">
+            <h2>Just For Us</h2>
+        </div>
+        <div class="shayari-grid">
+            {% for shayari in shayaris[:4] %}
+            <div class="shayari-card">
+                <div class="quote-mark">❝</div>
+                <p>{{ shayari }}</p>
+                <span class="shayari-heart">💖</span>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- LOCK / LOGOUT BUTTON -->
+    <div class="private-actions">
+        <a href="{{ url_for('private.lock') }}" class="btn alt">
+            🔒 Lock Secret Place
+        </a>
+    </div>
+
+</div>
+{% endblock %}

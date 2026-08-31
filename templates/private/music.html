@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Songs - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .music-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .music-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .music-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        color: #5a3040;
+        margin-bottom: 10px;
+    }
+    .music-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .music-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: var(--shadow-small);
+        border: 1px solid rgba(255, 182, 193, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .music-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+    }
+    .cover-wrapper {
+        margin-bottom: 20px;
+    }
+    .cover-image {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: var(--shadow-small);
+        border: 3px solid var(--rose-light);
+    }
+    .cover-placeholder {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        background: var(--pink);
+        border: 3px dashed var(--rose-light);
+        color: var(--rose);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 50px;
+        box-shadow: var(--shadow-small);
+    }
+    .song-details {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .song-details h3 {
+        font-size: 20px;
+        color: #5a3040;
+        margin: 5px 0;
+        font-weight: 600;
+    }
+    .song-details p {
+        font-size: 13px;
+        color: #8c586c;
+        margin: 0;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 24px;
+        border: 1px dashed rgba(255, 182, 193, 0.6);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="music-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="music-header">
+        <h1>🎵 Our Private Music</h1>
+        <p style="color: var(--deep-soft); font-size: 14px;">Secret romantic tracks shared between our hearts. 🌸</p>
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('music.add_music', private='true') }}" class="btn">
+                + Add Private Song
+            </a>
+        </div>
+    </div>
+
+    {% if tracks %}
+    <div class="music-grid">
+        {% for t in tracks %}
+        <article class="music-card">
+            <div class="cover-wrapper">
+                {% if t.cover %}
+                <img src="/media/music/covers/{{ t.cover }}" alt="{{ t.title }}" class="cover-image">
+                {% else %}
+                <div class="cover-placeholder">🎵</div>
+                {% endif %}
+            </div>
+
+            <div class="song-details">
+                <h3>{{ t.title }}</h3>
+                <p>by {{ t.artist or "Our Love Song" }}</p>
+            </div>
+
+            <div style="width: 100%; margin-top: 10px;">
+                <audio controls src="/media/music/{{ t.file }}" style="width: 100%; border-radius: 30px; margin-bottom: 10px;"></audio>
+                <button onclick="setGlobalBgMusic('{{ t.file }}', '{{ t.title }}')" class="btn alt" style="width: 100%; padding: 8px; font-size: 12px; margin-bottom: 5px;">
+                    🌸 Local Playback Background
+                </button>
+                {% if session.get('logged_in') %}
+                <a href="{{ url_for('music.set_background', music_id=t.id) }}" class="btn" style="width: 100%; padding: 8px; font-size: 12px; text-decoration: none; display: block; text-align: center; box-sizing: border-box;">
+                    👑 Set Default for Everyone
+                </a>
+                {% endif %}
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 50px; margin-bottom: 15px;">🎶</div>
+        <h3 style="color: #5a3040; font-size: 20px; margin-bottom: 8px;">No secret songs yet...</h3>
+        <p style="color: #8c586c; font-size: 13px; margin-bottom: 20px;">Upload a song file directly from your phone storage!</p>
+        <a href="{{ url_for('music.add_music', private='true') }}" class="btn">Add Secret Song</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%">
+    <defs>
+        <!-- Sunset Sky Gradient -->
+        <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#4a1836" />
+            <stop offset="30%" stop-color="#8b2f59" />
+            <stop offset="65%" stop-color="#d9534f" />
+            <stop offset="85%" stop-color="#f0ad4e" />
+            <stop offset="100%" stop-color="#fbe8a6" />
+        </linearGradient>
+
+        <!-- Sun Glow -->
+        <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+            <stop offset="40%" stop-color="#fff3a7" stop-opacity="0.9" />
+            <stop offset="80%" stop-color="#ff7b54" stop-opacity="0.4" />
+            <stop offset="100%" stop-color="#d9534f" stop-opacity="0" />
+        </radialGradient>
+
+        <!-- Sea Gradient -->
+        <linearGradient id="seaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ff8e53" />
+            <stop offset="25%" stop-color="#c74b68" />
+            <stop offset="60%" stop-color="#41295a" />
+            <stop offset="100%" stop-color="#190a28" />
+        </linearGradient>
+
+        <!-- Wave Foam Gradient -->
+        <linearGradient id="foamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+            <stop offset="50%" stop-color="#ffe5b4" stop-opacity="0.9" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.8" />
+        </linearGradient>
+
+        <!-- Gold Temple Silhouette -->
+        <linearGradient id="templeGold" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffe28a" />
+            <stop offset="50%" stop-color="#b8860b" />
+            <stop offset="100%" stop-color="#2d131d" />
+        </linearGradient>
+    </defs>
+
+    <!-- Sky Background -->
+    <rect width="1200" height="800" fill="url(#skyGrad)" />
+
+    <!-- Sun -->
+    <circle cx="600" cy="380" r="140" fill="url(#sunGlow)" />
+
+    <!-- Distant Ocean Horizon -->
+    <rect y="440" width="1200" height="360" fill="url(#seaGrad)" />
+
+    <!-- Jagannath Temple & Shikhara Silhouette (Left Center) -->
+    <g transform="translate(180, 160)">
+        <!-- Main Vimana Tower -->
+        <path d="M120 280 C110 210, 100 140, 130 90 C140 70, 150 50, 155 30 L165 30 C170 50, 180 70, 190 90 C220 140, 210 210, 200 280 Z" fill="url(#templeGold)" opacity="0.95" />
+        <!-- Neelachakra Wheel on Top -->
+        <circle cx="160" cy="22" r="14" fill="#ffd700" stroke="#b8860b" stroke-width="2" />
+        <line x1="160" y1="8" x2="160" y2="36" stroke="#5a3040" stroke-width="2" />
+        <line x1="146" y1="22" x2="174" y2="22" stroke="#5a3040" stroke-width="2" />
+        <!-- Patitapabana Flag -->
+        <path d="M160 10 Q180 2, 200 12 Q180 20, 160 18 Z" fill="#ff4500" />
+        
+        <!-- Jagamohana / Mukhashala Tower -->
+        <polygon points="60,280 80,180 130,180 140,280" fill="url(#templeGold)" opacity="0.9" />
+        <polygon points="180,280 190,190 230,190 250,280" fill="url(#templeGold)" opacity="0.9" />
+    </g>
+
+    <!-- Sea Waves Layer 1 -->
+    <path d="M0 480 Q 300 450, 600 490 T 1200 470 L 1200 800 L 0 800 Z" fill="url(#seaGrad)" opacity="0.8" />
+    <path d="M0 490 Q 300 460, 600 500 T 1200 480" fill="none" stroke="url(#foamGrad)" stroke-width="6" />
+
+    <!-- Sea Waves Layer 2 -->
+    <path d="M0 540 Q 350 510, 700 560 T 1200 530 L 1200 800 L 0 800 Z" fill="#2d132c" opacity="0.85" />
+    <path d="M0 550 Q 350 520, 700 570 T 1200 540" fill="none" stroke="#fff" stroke-width="4" opacity="0.7" />
+
+    <!-- Golden Sandy Beach Shore -->
+    <path d="M0 620 Q 400 580, 800 640 T 1200 610 L 1200 800 L 0 800 Z" fill="#f4a460" opacity="0.9" />
+    <path d="M0 625 Q 400 585, 800 645 T 1200 615 L 1200 800 L 0 800 Z" fill="#e59866" />
+
+    <!-- Palm Trees Silhouettes (Right Coast) -->
+    <g fill="#1a0a16" transform="translate(980, 320)">
+        <!-- Trunk 1 -->
+        <path d="M40 320 C50 220, 30 120, 60 0 C64 0, 68 2, 64 120 C48 220, 56 320, 40 320 Z" />
+        <!-- Leaves 1 -->
+        <path d="M60 0 Q 0 -40, -40 20 Q 10 -10, 60 0 Z" fill="#240c1e" />
+        <path d="M60 0 Q 120 -50, 160 10 Q 90 -20, 60 0 Z" fill="#240c1e" />
+        <path d="M60 0 Q 40 -80, 20 -100 Q 50 -60, 60 0 Z" fill="#240c1e" />
+        <path d="M60 0 Q 80 -80, 110 -90 Q 80 -50, 60 0 Z" fill="#240c1e" />
+        <!-- Trunk 2 -->
+        <path d="M110 320 C100 240, 120 160, 100 40 C104 40, 108 42, 104 160 C124 240, 116 320, 110 320 Z" />
+        <!-- Leaves 2 -->
+        <path d="M100 40 Q 40 0, 0 60 Q 50 30, 100 40 Z" fill="#240c1e" />
+        <path d="M100 40 Q 160 -10, 190 50 Q 140 20, 100 40 Z" fill="#240c1e" />
+    </g>
+
+    <!-- Flying Sea Birds -->
+    <g fill="none" stroke="#fff" stroke-width="3" opacity="0.8">
+        <path d="M 400 180 Q 415 165, 430 180 Q 445 165, 460 180" />
+        <path d="M 450 210 Q 462 198, 474 210 Q 486 198, 498 210" />
+        <path d="M 520 160 Q 530 148, 540 160 Q 550 148, 560 160" />
+    </g>
+
+    <!-- Elegant Overlay Banner Text -->
+    <rect x="250" y="680" width="700" height="75" rx="38" fill="rgba(20, 8, 18, 0.75)" stroke="rgba(255, 215, 0, 0.6)" stroke-width="2" />
+    <text x="600" y="718" font-family="'Cormorant Garamond', Georgia, serif" font-size="28" font-weight="bold" fill="#ffd700" text-anchor="middle" letter-spacing="2">
+        🛕 SHREE JAGANNATH DHAM &amp; PURI GOLDEN BEACH 🌊
+    </text>
+    <text x="600" y="742" font-family="'Poppins', sans-serif" font-size="13" fill="#ffe4e1" text-anchor="middle" font-style="italic">
+        Sacred Blessings, Golden Waves &amp; Everlasting Love Memories
+    </text>
+</svg>

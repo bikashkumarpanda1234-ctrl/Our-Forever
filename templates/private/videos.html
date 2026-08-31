@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Videos - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .videos-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .videos-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .videos-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 38px;
+        color: #5a3040;
+        margin-bottom: 10px;
+    }
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .video-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow-small);
+        border: 1px solid rgba(255, 182, 193, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .video-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+    }
+    .video-wrapper {
+        width: 100%;
+        height: 220px;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .video-wrapper video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    .video-info {
+        padding: 20px;
+    }
+    .video-info h3 {
+        font-size: 18px;
+        color: #5a3040;
+        margin: 0 0 10px;
+        font-weight: 600;
+    }
+    .video-info p {
+        font-size: 13px;
+        color: #8c586c;
+        margin: 0;
+        line-height: 1.5;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 24px;
+        border: 1px dashed rgba(255, 182, 193, 0.6);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="videos-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="videos-header">
+        <h1>🎥 Our Private Videos</h1>
+        <p style="color: var(--deep-soft); font-size: 14px;">Secret video logs from our special trips and dates. 🎬</p>
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('videos.add_video', private='true') }}" class="btn">
+                + Add Private Video
+            </a>
+        </div>
+    </div>
+
+    {% if videos %}
+    <div class="video-grid">
+        {% for v in videos %}
+        <article class="video-card">
+            <div class="video-wrapper">
+                <video src="/media/videos/private/{{ v.path }}" controls></video>
+            </div>
+            <div class="video-info">
+                <h3>{{ v.title }}</h3>
+                <p>{{ v.description or "" }}</p>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 50px; margin-bottom: 15px;">🎬</div>
+        <h3 style="color: #5a3040; font-size: 20px; margin-bottom: 8px;">No secret videos yet...</h3>
+        <p style="color: #8c586c; font-size: 13px; margin-bottom: 20px;">Upload a private video clip directly from your phone camera.</p>
+        <a href="{{ url_for('videos.add_video', private='true') }}" class="btn">Add Secret Video</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

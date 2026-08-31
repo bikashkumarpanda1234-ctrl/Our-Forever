@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}{{ letter.title }} - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('letters.letters') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Letters
+        </a>
+    </div>
+
+    <article class="letter fade-up" style="background: #fffdf8; padding: 45px 35px; border-radius: 20px; box-shadow: var(--shadow); border: 1px solid #f6e6eb; margin-bottom: 50px;">
+        <div class="eyebrow" style="text-align: center; margin-bottom: 10px;">a letter from my heart</div>
+        <h1 style="text-align: center; font-size: clamp(32px, 5vw, 50px); margin: 0 0 5px; color: var(--deep);">
+            {{ letter.title }}
+        </h1>
+        
+        {% if letter.created_at %}
+        <div style="text-align: center; color: var(--rose); font-weight: 500; font-size: 14px; margin-bottom: 30px;">
+            ♥ {{ letter.created_at.strftime('%B %d, %Y') }}
+        </div>
+        {% endif %}
+
+        {% if letter.image %}
+        <div style="margin-bottom: 30px; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow-small); background: #fff8fa;">
+            <img src="/media/photos/public/{{ letter.image }}" alt="{{ letter.title }}" style="width: 100%; max-height: 400px; object-fit: contain; display: block;">
+        </div>
+        {% endif %}
+
+        <p style="white-space: pre-line; line-height: 2; font-size: 16px; color: var(--deep-soft); font-family: Georgia, serif;">
+            {{ letter.body }}
+        </p>
+    </article>
+</div>
+{% endblock %}

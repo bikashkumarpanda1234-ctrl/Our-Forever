@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Letter - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 700px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin.letters') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Letters List
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Edit Letter 💌</h2>
+        
+        <form method="POST">
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Letter Title</label>
+            <input type="text" name="title" value="{{ letter.title }}" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- BODY CONTENT -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Letter Body</label>
+            <textarea name="letter" rows="10" style="width: 100%; padding: 12px; margin-bottom: 30px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical; font-family: Georgia, serif; line-height: 1.8;" required>{{ letter.body }}</textarea>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Update Letter
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

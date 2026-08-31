@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Music - Admin Dashboard - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <div class="section-title">
+        <h2>Manage Soundtrack 🎵</h2>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 35px;">
+        <a class="btn" href="{{ url_for('music.add_music') }}">+ Add Song</a>
+    </div>
+
+    {% if music %}
+    <div class="grid">
+        {% for m in music %}
+        <article class="card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 15px; text-align: center; align-items: center;">
+            <div style="width: 100%;">
+                <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 12px; background: #fff8fa; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-small);">
+                    {% if m.cover %}
+                    <img src="/media/music/covers/{{ m.cover }}" alt="{{ m.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <span style="font-size: 40px;">🎵</span>
+                    {% endif %}
+                </div>
+                <h3 style="font-size: 20px; margin: 5px 0;">{{ m.title }}</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); margin: 0 0 15px;">{{ m.artist }}</p>
+                <audio src="/media/music/{{ m.file }}" controls style="width: 100%; max-width: 220px; margin-bottom: 15px;"></audio>
+            </div>
+            <div style="display: flex; gap: 10px; border-top: 1px solid #f6e6eb; padding-top: 12px; width: 100%;">
+                <a href="{{ url_for('admin.edit_music', music_id=m.id) }}" class="btn alt" style="flex: 1; padding: 8px; font-size: 12px;">Edit</a>
+                <a href="{{ url_for('admin.delete_music', music_id=m.id) }}" onclick="return confirm('Are you sure you want to delete this track? This deletes the files! ❤️');" class="btn" style="flex: 1; padding: 8px; font-size: 12px; background: #be123c;">Delete</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty">
+        <p>No songs added yet. Click above to add one!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

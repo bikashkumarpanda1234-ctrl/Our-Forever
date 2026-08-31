@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Add Shayari - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('shayari.shayari') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Shayari
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Add Shayari ✍️</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-size: 14px; color: var(--deep-soft);">
+            Add romantic verses, poetry, or quotes to express your feelings.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Title (Optional)</label>
+            <input type="text" name="title" placeholder="e.g. Tere Sang / My Everything" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;">
+
+            <!-- SHAYARI TEXT -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Shayari Verses</label>
+            <textarea name="text" placeholder="Tum mile to mil gaya ye jahan, tum na ho to kuch bhi nahi... ❤️" rows="6" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; line-height: 1.6; text-align: center;" required></textarea>
+
+            <!-- OPTIONAL PHOTO -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Optional Photo Background</label>
+            <input type="file" name="photo" accept="image/*" style="width: 100%; padding: 10px; margin-bottom: 30px; box-sizing: border-box;">
+
+            <!-- PRIVATE CHECKBOX -->
+            <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                <input type="checkbox" name="is_private" id="is-private" style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;" {% if request.args.get('private') == 'true' %}checked{% endif %}>
+                <label for="is-private" style="cursor: pointer; font-weight: 500; color: var(--deep);">
+                    🔒 Save to Private section
+                </label>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Save Shayari
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

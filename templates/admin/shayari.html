@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Shayari - Admin Dashboard - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <div class="section-title">
+        <h2>Manage Shayari ✍️</h2>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 35px;">
+        <a class="btn" href="{{ url_for('shayari.add_shayari') }}">+ Add Shayari</a>
+    </div>
+
+    {% if shayaris %}
+    <div class="grid">
+        {% for s in shayaris %}
+        <article class="card" style="display: flex; flex-direction: column; justify-content: space-between; padding: 15px;">
+            <div>
+                {% if s.image %}
+                <div style="height: 140px; overflow: hidden; border-radius: 12px; margin-bottom: 12px; background: #fff8fa; display: flex; align-items: center; justify-content: center;">
+                    <img src="/media/photos/public/{{ s.image }}" alt="{{ s.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                {% endif %}
+                <h3 style="font-size: 20px; margin: 0 0 8px; color: var(--deep);">{{ s.title or "Romantic Shayari" }}</h3>
+                <p style="font-size: 13px; color: var(--deep-soft); line-height: 1.5; margin: 0 0 15px; max-height: 60px; overflow: hidden; font-style: italic;">
+                    {{ s.body }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 10px; border-top: 1px solid #f6e6eb; padding-top: 12px; width: 100%;">
+                <a href="{{ url_for('admin.edit_shayari', shayari_id=s.id) }}" class="btn alt" style="flex: 1; padding: 8px; font-size: 12px;">Edit</a>
+                <a href="{{ url_for('admin.delete_shayari', shayari_id=s.id) }}" onclick="return confirm('Are you sure you want to delete this Shayari? ❤️');" class="btn" style="flex: 1; padding: 8px; font-size: 12px; background: #be123c;">Delete</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="home-empty">
+        <p>No Shayari added yet. Click above to add some!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

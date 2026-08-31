@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Memory Lost - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="text-align: center; padding: 100px 25px;">
+    <div style="font-size: 80px; margin-bottom: 20px;">🥀</div>
+    <h1 style="font-size: 60px; margin: 0 0 15px; color: var(--deep);">Oops...</h1>
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: var(--deep-soft); margin-bottom: 35px;">
+        This little memory got lost in time.
+    </h2>
+    <a class="btn" href="{{ url_for('home.index') }}">
+        Back Home ❤️
+    </a>
+</div>
+{% endblock %}

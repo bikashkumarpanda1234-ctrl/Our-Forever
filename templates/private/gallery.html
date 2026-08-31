@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Our Secret Photos - Our Forever ❤️{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gallery-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+        font-family: 'Poppins', sans-serif;
+    }
+    .gallery-header {
+        text-align: center;
+        margin-bottom: 45px;
+    }
+    .gallery-header h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(36px, 5vw, 50px);
+        color: var(--deep);
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    .photo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+        gap: 28px;
+    }
+    .photo-card {
+        background: #ffffff;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(90, 35, 55, 0.08);
+        border: 1px solid rgba(255, 182, 193, 0.4);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        cursor: pointer;
+    }
+    .photo-card:hover {
+        transform: translateY(-8px) scale(1.015);
+        box-shadow: 0 20px 50px rgba(90, 35, 55, 0.16);
+    }
+    .photo-wrapper {
+        position: relative;
+        width: 100%;
+        height: 320px;
+        background: #fff8fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-bottom: 1px solid rgba(255, 182, 193, 0.2);
+    }
+    .photo-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background-color: #fff8fa;
+        transition: transform 0.4s ease;
+    }
+    .photo-card:hover .photo-wrapper img {
+        transform: scale(1.035);
+    }
+    .photo-info {
+        padding: 20px 22px 24px;
+    }
+    .photo-info h3 {
+        font-size: 20px;
+        color: var(--deep);
+        margin: 0 0 8px;
+        font-weight: 600;
+    }
+    .photo-info p {
+        font-size: 13px;
+        color: var(--deep-soft);
+        margin: 0;
+        line-height: 1.6;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 70px 20px;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 28px;
+        border: 1px dashed rgba(255, 182, 193, 0.6);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="gallery-container">
+    <div style="margin-bottom: 25px;">
+        <a href="{{ url_for('private.dashboard') }}" style="text-decoration: none; color: var(--rose); font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+            ← Back to Secret Place
+        </a>
+    </div>
+
+    <div class="gallery-header">
+        <h1>🔒 Our Private Photos</h1>
+        <p style="color: var(--deep-soft); font-size: 15px;">These {{ memories|length }} moments belong only to us. Click any photo to view in full screen! ❤️</p>
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('admin.add_memory', private='true') }}" class="btn">
+                + Add Private Photo
+            </a>
+        </div>
+    </div>
+
+    {% if memories %}
+    <div class="photo-grid">
+        {% for m in memories %}
+        <article class="photo-card" onclick="openPrivateLightbox({{ loop.index0 }})">
+            <div class="photo-wrapper">
+                <img src="/media/photos/private/{{ m.image }}" alt="{{ m.title }}" loading="lazy">
+                <div style="position: absolute; top: 12px; right: 12px; background: rgba(255, 255, 255, 0.9); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--rose); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">🔒</div>
+            </div>
+            <div class="photo-info">
+                <h3>{{ m.title }}</h3>
+                <p>{{ m.description or "A secret moment locked in our private vault." }}</p>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div style="font-size: 50px; margin-bottom: 15px;">💖</div>
+        <h3 style="color: var(--deep); font-size: 22px; margin-bottom: 8px;">No secret photos yet...</h3>
+        <p style="color: var(--deep-soft); font-size: 14px; margin-bottom: 25px;">Upload a secret memory from your phone library!</p>
+        <a href="{{ url_for('admin.add_memory', private='true') }}" class="btn">Add Secret Photo</a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- FULL SCREEN LIGHTBOX MODAL FOR PRIVATE PHOTOS -->
+<div id="private-lightbox-modal" class="lightbox-modal" onclick="closePrivateLightboxOnBackdrop(event)">
+    <div class="lightbox-content">
+        <div class="lightbox-close" onclick="closePrivateLightbox()">✕</div>
+        <div class="lightbox-nav lightbox-prev" onclick="navigatePrivateLightbox(-1)">‹</div>
+        <div class="lightbox-nav lightbox-next" onclick="navigatePrivateLightbox(1)">›</div>
+        <div class="lightbox-img-wrapper">
+            <img id="private-lightbox-img" src="" alt="Private Memory preview">
+        </div>
+        <div class="lightbox-caption">
+            <h3 id="private-lightbox-title">Memory Title</h3>
+            <p id="private-lightbox-desc">Memory Description</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const allPrivateMemories = [
+        {% for m in memories %}
+        {
+            image: "/media/photos/private/{{ m.image }}",
+            title: {{ m.title|tojson }},
+            description: {{ (m.description or "A secret moment locked in our private vault.")|tojson }}
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    let currentPrivateIndex = 0;
+
+    function openPrivateLightbox(index) {
+        if (index < 0 || index >= allPrivateMemories.length) return;
+        currentPrivateIndex = index;
+        const memory = allPrivateMemories[index];
+        document.getElementById("private-lightbox-img").src = memory.image;
+        document.getElementById("private-lightbox-title").textContent = memory.title;
+        document.getElementById("private-lightbox-desc").textContent = memory.description;
+        document.getElementById("private-lightbox-modal").classList.add("active");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closePrivateLightbox() {
+        document.getElementById("private-lightbox-modal").classList.remove("active");
+        document.body.style.overflow = "auto";
+    }
+
+    function closePrivateLightboxOnBackdrop(e) {
+        if (e.target.id === "private-lightbox-modal") {
+            closePrivateLightbox();
+        }
+    }
+
+    function navigatePrivateLightbox(dir) {
+        let newIndex = currentPrivateIndex + dir;
+        if (newIndex < 0) newIndex = allPrivateMemories.length - 1;
+        if (newIndex >= allPrivateMemories.length) newIndex = 0;
+        openPrivateLightbox(newIndex);
+    }
+
+    document.addEventListener("keydown", function(e) {
+        const modal = document.getElementById("private-lightbox-modal");
+        if (modal && modal.classList.contains("active")) {
+            if (e.key === "Escape") closePrivateLightbox();
+            if (e.key === "ArrowLeft") navigatePrivateLightbox(-1);
+            if (e.key === "ArrowRight") navigatePrivateLightbox(1);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Memory - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('admin.memories') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Memories List
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Edit Memory Details 📸</h2>
+        
+        <form method="POST">
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Title</label>
+            <input type="text" name="title" value="{{ memory.title }}" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- DESCRIPTION -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Description</label>
+            <textarea name="description" rows="5" style="width: 100%; padding: 12px; margin-bottom: 30px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical;">{{ memory.description or "" }}</textarea>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Update Memory
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

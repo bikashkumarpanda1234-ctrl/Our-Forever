@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Video - Our Forever ❤️{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px;">
+    <div style="margin-bottom: 20px;">
+        <a href="{{ url_for('videos.videos') }}" style="text-decoration: none; color: var(--rose); font-weight: 600;">
+            ← Back to Videos
+        </a>
+    </div>
+
+    <div class="card" style="padding: 35px; background: rgba(255, 255, 255, 0.9);">
+        <h2 style="font-size: 32px; margin-top: 0; text-align: center; color: var(--deep);">Upload a Video 🎥</h2>
+        <p style="text-align: center; margin-bottom: 30px; font-size: 14px; color: var(--deep-soft);">
+            Add a public or private video clip directly from your phone.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+            <!-- TITLE -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Video Title</label>
+            <input type="text" name="title" placeholder="Our special day ❤️" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box;" required>
+
+            <!-- DESCRIPTION -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Description</label>
+            <textarea name="description" placeholder="Describe the feeling of this moment..." rows="4" style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #efc8d3; border-radius: 12px; box-sizing: border-box; resize: vertical;"></textarea>
+
+            <!-- FILE INPUT -->
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: var(--deep);">Choose Video File</label>
+            <input type="file" name="video" accept="video/*" style="width: 100%; padding: 10px; margin-bottom: 20px; box-sizing: border-box;" required>
+            <small style="display: block; color: var(--rose); margin-top: -15px; margin-bottom: 20px;">
+                Supported formats: mp4, webm, mov, avi. Max 50MB.
+            </small>
+
+            <!-- PRIVATE CHECKBOX -->
+            <div style="display: flex; align-items: center; margin-bottom: 30px;">
+                <input type="checkbox" name="is_private" id="is-private" style="width: 20px; height: 20px; cursor: pointer; margin-right: 10px;" {% if request.args.get('private') == 'true' %}checked{% endif %}>
+                <label for="is-private" style="cursor: pointer; font-weight: 500; color: var(--deep);">
+                    🔒 Save to Private section
+                </label>
+            </div>
+
+            <!-- SUBMIT BUTTON -->
+            <button type="submit" class="btn" style="width: 100%; padding: 14px;">
+                ❤️ Upload Video
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
