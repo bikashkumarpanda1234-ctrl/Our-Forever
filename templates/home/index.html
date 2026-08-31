@@ -243,8 +243,9 @@
                 Our absolute favorite video capturing pure happiness, silly laughs, and magical moments together. Press play to experience our joy in crisp HD! 🎬✨
             </p>
             
-            <div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #0c0508; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 255, 255, 0.9);">
-                <video src="/media/videos/public/baby6.mp4" controls preload="metadata" playsinline webkit-playsinline style="width: 100%; max-height: 520px; object-fit: contain; display: block; background: #0c0508;"></video>
+            <div onclick="openVideoLightbox('/media/videos/public/baby6.mp4', 'Fun & Silly Times 🌺', 'Our favorite video capturing pure happiness, silly laughs, and magical moments together.')" style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #11080c; cursor: pointer; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 255, 255, 0.9); height: 420px; display: flex; align-items: center; justify-content: center;">
+                <video src="/media/videos/public/baby6.mp4#t=0.5" preload="metadata" playsinline webkit-playsinline style="width: 100%; height: 100%; object-fit: cover; pointer-events: none; opacity: 0.85;"></video>
+                <div style="position: absolute; width: 75px; height: 75px; background: rgba(255, 255, 255, 0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--rose); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease;">▶</div>
             </div>
 
             <div style="margin-top: 20px; font-size: 13px; color: var(--rose); font-weight: 600; font-style: italic;">
@@ -258,31 +259,21 @@
         <div class="home-section-heading">
             <div>
                 <div class="chapter-badge">CAPTURED MOMENTS IN MOTION</div>
-                <h2>Our Shared Videos 🎬 ({{ videos|length }})</h2>
+                <h2>Our Shared Video Cinema 🎬</h2>
             </div>
-            <a href="{{ url_for('videos.videos') }}" class="btn alt">View All Videos 🎥</a>
+            <a href="{{ url_for('videos.videos') }}" class="btn alt">Watch All Videos 🎥</a>
         </div>
 
-        {% if videos %}
-        <div class="home-photo-grid">
-            {% for v in videos %}
-            <article class="home-memory-card" style="padding: 14px; background: #ffffff; cursor: pointer;" onclick="openVideoLightbox('/media/videos/public/{{ v.path }}', {{ v.title|tojson }}, {{ (v.description or '')|tojson }})">
-                <div class="home-memory-image" style="height: 240px; border-radius: 18px; overflow: hidden; background: #11080c; position: relative; display: flex; align-items: center; justify-content: center;">
-                    <video src="/media/videos/public/{{ v.path }}#t=0.5" preload="metadata" playsinline webkit-playsinline style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
-                    <div style="position: absolute; width: 55px; height: 55px; background: rgba(255,255,255,0.85); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--rose); box-shadow: 0 6px 20px rgba(0,0,0,0.3);">▶</div>
-                </div>
-                <div class="home-memory-content" style="padding: 12px 10px 8px;">
-                    <h3 style="font-size: 22px; margin: 0 0 4px;">{{ v.title }}</h3>
-                    <p style="font-size: 13px; color: var(--deep-soft); margin: 0;">{{ v.description or "A sweet video capturing our moments." }}</p>
-                </div>
-            </article>
-            {% endfor %}
+        <div style="background: linear-gradient(135deg, rgba(255, 240, 243, 0.95), rgba(255, 225, 235, 0.95)); border-radius: 28px; padding: 35px 25px; text-align: center; border: 1px solid rgba(255, 182, 193, 0.5); box-shadow: 0 12px 35px rgba(239, 200, 211, 0.4);">
+            <div style="font-size: 50px; margin-bottom: 12px; animation: float 3s ease-in-out infinite;">🎥✨</div>
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 28px; color: #5a3040; margin-bottom: 10px;">Our Romantic Video Collection</h3>
+            <p style="color: #8c586c; font-size: 15px; max-width: 550px; margin: 0 auto 22px; line-height: 1.6;">
+                Every laugh, every trip, and every sweet smile captured in motion. Tap below to explore our full video cinema hall! ❤️
+            </p>
+            <a href="{{ url_for('videos.videos') }}" class="btn" style="padding: 12px 32px; font-size: 15px;">
+                🎬 Open Full Video Gallery ({{ videos|length }} Clips)
+            </a>
         </div>
-        {% else %}
-        <div class="home-empty">
-            <p>No public videos uploaded yet. 🎬</p>
-        </div>
-        {% endif %}
     </section>
 
     <!-- 10. MUSIC PREVIEW -->
