@@ -2951,18 +2951,18 @@ main {
 }
 </style>
 <script>
-// PROFESSIONAL FAIL-SAFE FALLING FLOWERS SHOWER
+// ELEGANT & SUBTLE FALLING FLOWERS SHOWER ("FULLA KHASUTHIBA")
 (function startProFallingFlowers() {
     function spawnFlower() {
         var f = document.createElement('div');
-        var flowers = ['🌸', '🌹', '🌺', '🥀', '🌷', '💐', '✨', '💖'];
+        var flowers = ['🌸', '🌹', '🌺', '✨', '💖'];
         var flower = flowers[Math.floor(Math.random() * flowers.length)];
         var left = Math.random() * 95;
-        var duration = 4 + Math.random() * 4;
-        var size = 22 + Math.random() * 24;
+        var duration = 7 + Math.random() * 6;
+        var size = 12 + Math.random() * 8;
 
         f.innerHTML = flower;
-        f.style.cssText = 'position: fixed !important; top: -60px; left: ' + left + 'vw; font-size: ' + size + 'px; z-index: 99999999 !important; pointer-events: none !important; animation: proFlowerFall ' + duration + 's linear forwards !important;';
+        f.style.cssText = 'position: fixed !important; top: -35px; left: ' + left + 'vw; font-size: ' + size + 'px; z-index: 99999999 !important; pointer-events: none !important; animation: proFlowerFall ' + duration + 's linear forwards !important;';
         (document.body || document.documentElement).appendChild(f);
 
         setTimeout(function() {
@@ -2970,10 +2970,10 @@ main {
         }, duration * 1000);
     }
 
-    for (var i = 0; i < 15; i++) {
-        setTimeout(spawnFlower, i * 80);
+    for (var i = 0; i < 3; i++) {
+        setTimeout(spawnFlower, i * 400);
     }
-    setInterval(spawnFlower, 250);
+    setInterval(spawnFlower, 1400);
 })();
 </script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
