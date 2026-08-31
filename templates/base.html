@@ -2473,7 +2473,7 @@ main {
         background: rgba(15, 10, 15, 0.94);
         backdrop-filter: blur(12px);
         z-index: 999999;
-        display: flex;
+        display: none !important;
         align-items: center;
         justify-content: center;
         opacity: 0;
@@ -2483,8 +2483,9 @@ main {
         box-sizing: border-box;
     }
     .video-lightbox-modal.active {
-        opacity: 1;
-        visibility: visible;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
     .video-lightbox-container {
         width: 100%;
