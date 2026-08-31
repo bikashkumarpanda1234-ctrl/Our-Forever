@@ -2544,25 +2544,36 @@ main {
         <div class="splash-heart">💖</div>
         <h1>Welcome to Our Forever</h1>
         <p>Tap Enter to open our special memory book with our background soundtrack. 🎵</p>
-        <button id="enter-site-btn" class="btn" onclick="dismissSplash()">Enter Our Space ❤️</button>
+        <button id="enter-site-btn" class="btn" type="button" onclick="dismissSplash(event)">Enter Our Space ❤️</button>
     </div>
 </div>
 <script>
-    function dismissSplash() {
+    function dismissSplash(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        try {
+            sessionStorage.setItem('entered_site', 'true');
+        } catch(err) {}
+        
         var splash = document.getElementById('splash-overlay');
         if (splash) {
-            splash.classList.add('hidden');
-            splash.style.display = 'none';
-            sessionStorage.setItem('entered_site', 'true');
+            splash.style.setProperty('display', 'none', 'important');
+            splash.style.setProperty('opacity', '0', 'important');
+            splash.style.setProperty('visibility', 'hidden', 'important');
+            splash.style.setProperty('pointer-events', 'none', 'important');
         }
         var audio = document.getElementById('global-bg-audio');
         if (audio && audio.paused && localStorage.getItem('bg_music_playing') !== 'false') {
-            audio.play().catch(function(e){ console.log("Audio play on click", e); });
+            audio.play().catch(function(err){ console.log("Audio auto-play:", err); });
         }
     }
     if (sessionStorage.getItem('entered_site') === 'true') {
         var splash = document.getElementById('splash-overlay');
-        if (splash) splash.style.display = 'none';
+        if (splash) {
+            splash.style.setProperty('display', 'none', 'important');
+        }
     }
 </script>
 

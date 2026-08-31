@@ -2304,3 +2304,11 @@ main {
     visibility: visible !important;
     pointer-events: auto !important;
 }
+
+#splash-overlay.hidden,
+#splash-overlay[style*="display: none"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
