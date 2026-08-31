@@ -2548,6 +2548,17 @@ main {
     </div>
 </div>
 <script>
+    // Global single-audio listener: ensure ONLY ONE audio/video plays at any time!
+    document.addEventListener('play', function(e) {
+        var playingEl = e.target;
+        if (!playingEl) return;
+        document.querySelectorAll('audio, video').forEach(function(media) {
+            if (media !== playingEl && !media.paused) {
+                media.pause();
+            }
+        });
+    }, true);
+
     window.setGlobalBgMusic = function(file, title, btnEl) {
         try {
             localStorage.setItem('bg_music_file', file);

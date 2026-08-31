@@ -197,34 +197,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateUI();
 
-    // 4. Auto-pause background music when a video plays, and resume when video pauses/ends
-    let wasMusicPausedByVideo = false;
-
+    // 4. Global single-audio enforcer: ensure ONLY ONE audio/video plays at any time!
     document.addEventListener('play', function(e) {
-        if (e.target && e.target.tagName === 'VIDEO') {
-            if (!audio.paused) {
-                wasMusicPausedByVideo = true;
-                pauseAudio();
+        const playingEl = e.target;
+        if (!playingEl) return;
+        document.querySelectorAll('audio, video').forEach(function(media) {
+            if (media !== playingEl && !media.paused) {
+                media.pause();
             }
-        }
-    }, true);
-
-    document.addEventListener('pause', function(e) {
-        if (e.target && e.target.tagName === 'VIDEO') {
-            if (wasMusicPausedByVideo) {
-                wasMusicPausedByVideo = false;
-                playAudio();
-            }
-        }
-    }, true);
-
-    document.addEventListener('ended', function(e) {
-        if (e.target && e.target.tagName === 'VIDEO') {
-            if (wasMusicPausedByVideo) {
-                wasMusicPausedByVideo = false;
-                playAudio();
-            }
-        }
+        });
     }, true);
 
 
