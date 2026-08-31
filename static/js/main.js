@@ -137,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isPlaying = false;
         localStorage.setItem('bg_music_playing', 'false');
         updateUI();
+        removeInteractionListeners();
     }
 
     // Toggle click handler
@@ -151,6 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. User interaction autoplay triggers (scroll, touch, swipe, click)
     const playOnInteract = (e) => {
+        // DO NOT play if user explicitly paused music!
+        if (localStorage.getItem('bg_music_playing') === 'false') {
+            removeInteractionListeners();
+            return;
+        }
+
         // DO NOT play music if Welcome Splash Screen is still active!
         const splashEl = document.getElementById('splash-overlay');
         if (splashEl && splashEl.style.display !== 'none' && !splashEl.classList.contains('hidden')) {
@@ -158,8 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (audio.paused) {
-            isPlaying = true;
-            localStorage.setItem('bg_music_playing', 'true');
             playAudio();
         }
     };
@@ -172,11 +177,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.removeEventListener('keydown', playOnInteract);
     }
 
-    document.addEventListener('click', playOnInteract);
-    document.addEventListener('touchstart', playOnInteract);
-    document.addEventListener('scroll', playOnInteract);
-    document.addEventListener('wheel', playOnInteract);
-    document.addEventListener('keydown', playOnInteract);
+    // Only add interaction listeners if user has NOT explicitly paused the music!
+    if (localStorage.getItem('bg_music_playing') !== 'false') {
+        document.addEventListener('click', playOnInteract);
+        document.addEventListener('touchstart', playOnInteract);
+        document.addEventListener('scroll', playOnInteract);
+        document.addEventListener('wheel', playOnInteract);
+        document.addEventListener('keydown', playOnInteract);
+    }
 
     // Attempt autoplay immediately ONLY IF splash screen is already dismissed!
     const activeSplash = document.getElementById('splash-overlay');
@@ -184,6 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isPlaying && !isSplashVisible) {
         playAudio();
+    } else {
+        removeInteractionListeners();
     }
     updateUI();
 
