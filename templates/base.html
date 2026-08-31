@@ -2634,8 +2634,8 @@ main {
             <img id="lightbox-img" src="" alt="Memory preview" style="display: none !important;">
         </div>
         <div class="lightbox-caption" style="display: none !important;">
-            <h3 id="lightbox-title" style="display: none !important;">Memory Title</h3>
-            <p id="lightbox-desc" style="display: none !important;">Memory Description</p>
+            <h3 id="lightbox-title" style="display: none !important;"></h3>
+            <p id="lightbox-desc" style="display: none !important;"></p>
         </div>
     </div>
 </div>
@@ -2648,8 +2648,8 @@ main {
             <video id="video-lightbox-player" controls playsinline webkit-playsinline style="display: none !important;"></video>
         </div>
         <div class="video-lightbox-info" style="display: none !important;">
-            <h3 id="video-lightbox-title" style="display: none !important; font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 0 0 6px; color: var(--rose);">Video Title</h3>
-            <p id="video-lightbox-desc" style="display: none !important; margin: 0; color: #ffebf0; font-size: 14px;">Video Description</p>
+            <h3 id="video-lightbox-title" style="display: none !important; font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 0 0 6px; color: var(--rose);"></h3>
+            <p id="video-lightbox-desc" style="display: none !important; margin: 0; color: #ffebf0; font-size: 14px;"></p>
         </div>
     </div>
 </div>
@@ -2706,8 +2706,8 @@ main {
         if (wrapper) wrapper.style.setProperty("display", "none", "important");
         if (player) player.style.setProperty("display", "none", "important");
         if (info) info.style.setProperty("display", "none", "important");
-        if (titleEl) titleEl.style.setProperty("display", "none", "important");
-        if (descEl) descEl.style.setProperty("display", "none", "important");
+        if (titleEl) { titleEl.textContent = ""; titleEl.style.setProperty("display", "none", "important"); }
+        if (descEl) { descEl.textContent = ""; descEl.style.setProperty("display", "none", "important"); }
 
         document.body.style.overflow = "auto";
     }
