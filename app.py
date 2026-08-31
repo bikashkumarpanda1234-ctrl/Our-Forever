@@ -528,15 +528,6 @@ def create_app():
 
     @app.route("/media/music/<path:filename>")
     def music_file(filename):
-        from models.music import Music
-        private_track = Music.query.filter_by(
-            file=filename,
-            is_private=True
-        ).first()
-
-        if private_track and not session.get("private_unlocked"):
-            return redirect(url_for("private.unlock", next=request.url))
-
         mime_types = {
             ".mp3": "audio/mpeg",
             ".webm": "audio/webm",
