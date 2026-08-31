@@ -2547,6 +2547,12 @@ main {
         <button id="enter-site-btn" class="btn">Enter Our Space ❤️</button>
     </div>
 </div>
+<script>
+    if (sessionStorage.getItem('entered_site') === 'true') {
+        var splash = document.getElementById('splash-overlay');
+        if (splash) splash.style.display = 'none';
+    }
+</script>
 
 <!-- NAVIGATION -->
 <nav class="nav">
