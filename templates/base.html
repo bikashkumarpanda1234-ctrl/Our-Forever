@@ -2587,7 +2587,7 @@ main {
             audio.muted = false;
             audio.volume = 1.0;
             audio.src = '/media/music/' + encodeURIComponent(file);
-            audio.currentTime = 0;
+            audio.load();
             var promise = audio.play();
             if (promise !== undefined) {
                 promise.then(function() {
@@ -2677,7 +2677,7 @@ main {
 
 
 <!-- GLOBAL BG AUDIO -->
-<audio id="global-bg-audio" data-default-song="{{ default_bg_song.file if default_bg_song else 'tum_se_hi.mp3' }}" data-default-title="{{ default_bg_song.title if default_bg_song else 'Tum Se Hi 🌸' }}"></audio>
+<audio id="global-bg-audio" preload="auto" playsinline webkit-playsinline data-default-song="{{ default_bg_song.file if default_bg_song else 'tum_se_hi.mp3' }}" data-default-title="{{ default_bg_song.title if default_bg_song else 'Tum Se Hi 🌸' }}"></audio>
 
 
 <!-- FLOATING MUSIC PLAYER -->

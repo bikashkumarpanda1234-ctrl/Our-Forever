@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.muted = false;
             audio.volume = 1.0;
             audio.src = `/media/music/${encodeURIComponent(file)}`;
-            audio.currentTime = 0;
+            audio.load();
             playAudio();
         }
     };
