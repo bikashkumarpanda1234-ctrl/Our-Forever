@@ -2930,41 +2930,30 @@ main {
             if (e.key === "Escape") closeVideoLightbox();
         }
     });
-<!-- FALLING FLOWERS CONTAINER -->
-<div id="falling-petals-container"></div>
 <script>
-    (function startFallingPetals() {
-        var container = document.getElementById('falling-petals-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'falling-petals-container';
-            (document.body || document.documentElement).appendChild(container);
-        }
+// PURE SIMPLE FAIL-SAFE FALLING FLOWERS SHOWER ("FULLA KHASUTHIBA")
+(function startFallingFlowers() {
+    function createFlower() {
+        var f = document.createElement('div');
+        var flowers = ['🌸', '🌹', '🌺', '🥀', '🌷', '💐', '✨', '💖'];
+        f.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
+        f.style.cssText = 'position: fixed !important; top: -50px !important; left: ' + (Math.random() * 95) + 'vw !important; font-size: ' + (22 + Math.random() * 26) + 'px !important; z-index: 99999999 !important; pointer-events: none !important; transition: transform 6s linear, opacity 6s linear !important; opacity: 1 !important;';
+        (document.body || document.documentElement).appendChild(f);
 
-        var petalSymbols = ['🌸', '🌹', '🌺', '🥀', '🌷', '💐', '✨', '💖'];
-        
-        function spawnPetal() {
-            var petal = document.createElement('span');
-            petal.textContent = petalSymbols[Math.floor(Math.random() * petalSymbols.length)];
-            var startLeft = Math.random() * 95;
-            var duration = 4 + Math.random() * 5;
-            var size = 20 + Math.random() * 22;
+        setTimeout(function() {
+            f.style.transform = 'translateY(' + (window.innerHeight + 120) + 'px) rotate(' + (Math.random() * 360) + 'deg)';
+        }, 50);
 
-            petal.style.cssText = 'position: absolute !important; top: -45px !important; left: ' + startLeft + 'vw !important; font-size: ' + size + 'px !important; opacity: 0; pointer-events: none !important; animation: fallRosePetal ' + duration + 's linear forwards !important; z-index: 999999 !important;';
-            container.appendChild(petal);
+        setTimeout(function() {
+            if (f.parentNode) f.parentNode.removeChild(f);
+        }, 6500);
+    }
 
-            setTimeout(function() {
-                if (petal.parentNode) {
-                    petal.parentNode.removeChild(petal);
-                }
-            }, duration * 1000);
-        }
-
-        for (var i = 0; i < 15; i++) {
-            setTimeout(spawnPetal, i * 80);
-        }
-        setInterval(spawnPetal, 250);
-    })();
+    for (var i = 0; i < 15; i++) {
+        setTimeout(createFlower, i * 100);
+    }
+    setInterval(createFlower, 280);
+})();
 </script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
