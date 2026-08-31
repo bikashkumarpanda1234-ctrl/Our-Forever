@@ -2548,13 +2548,31 @@ main {
     </div>
 </div>
 <script>
-    window.setGlobalBgMusic = function(file, title) {
+    window.setGlobalBgMusic = function(file, title, btnEl) {
         try {
             localStorage.setItem('bg_music_file', file);
             localStorage.setItem('bg_music_title', title);
             localStorage.setItem('bg_music_playing', 'true');
             localStorage.setItem('bg_music_time', '0');
         } catch(e) {}
+
+        // Reset all playlist buttons UI
+        document.querySelectorAll('.music-play-btn').forEach(function(b) {
+            b.style.background = '';
+            var txt = b.querySelector('.play-text');
+            var icn = b.querySelector('.play-icon');
+            if (txt) txt.textContent = 'Play Song';
+            if (icn) icn.textContent = '▶️';
+        });
+
+        // Update active button UI
+        if (btnEl) {
+            btnEl.style.background = 'linear-gradient(135deg, #2b8a3e 0%, #1b5e20 100%)';
+            var txt = btnEl.querySelector('.play-text');
+            var icn = btnEl.querySelector('.play-icon');
+            if (txt) txt.textContent = 'Playing 🎶';
+            if (icn) icn.textContent = '🔊';
+        }
 
         var audio = document.getElementById('global-bg-audio');
         var pillTitle = document.getElementById('player-song-title');
@@ -2565,15 +2583,25 @@ main {
         if (pillTitle) pillTitle.textContent = title;
 
         if (audio) {
+            audio.pause();
+            audio.muted = false;
+            audio.volume = 1.0;
             audio.src = '/media/music/' + encodeURIComponent(file);
             audio.currentTime = 0;
-            audio.play().then(function() {
-                if (pillStatus) pillStatus.textContent = '⏸️';
-                if (musicIcon) musicIcon.style.animation = 'musicRotate 3s linear infinite';
-                if (heartPulse) heartPulse.style.animation = 'privateHeartbeat 1.2s infinite';
-            }).catch(function(err) {
-                console.log("Play error:", err);
-            });
+            var promise = audio.play();
+            if (promise !== undefined) {
+                promise.then(function() {
+                    if (pillStatus) pillStatus.textContent = '⏸️';
+                    if (musicIcon) musicIcon.style.animation = 'musicRotate 3s linear infinite';
+                    if (heartPulse) heartPulse.style.animation = 'privateHeartbeat 1.2s infinite';
+                }).catch(function(err) {
+                    console.log("Play error:", err);
+                    if (btnEl) {
+                        var txt = btnEl.querySelector('.play-text');
+                        if (txt) txt.textContent = 'Tap again to play';
+                    }
+                });
+            }
         }
     };
 

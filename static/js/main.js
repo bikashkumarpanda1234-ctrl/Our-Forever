@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Expose global function to change background music from the playlist page
-    window.setGlobalBgMusic = function(file, title) {
+    window.setGlobalBgMusic = function(file, title, btnEl) {
         try {
             localStorage.setItem('bg_music_file', file);
             localStorage.setItem('bg_music_title', title);
@@ -242,7 +242,28 @@ document.addEventListener('DOMContentLoaded', () => {
         songTitle = title;
         savedTime = 0;
 
+        // Reset all playlist buttons UI
+        document.querySelectorAll('.music-play-btn').forEach(function(b) {
+            b.style.background = '';
+            var txt = b.querySelector('.play-text');
+            var icn = b.querySelector('.play-icon');
+            if (txt) txt.textContent = 'Play Song';
+            if (icn) icn.textContent = '▶️';
+        });
+
+        // Update active button UI
+        if (btnEl) {
+            btnEl.style.background = 'linear-gradient(135deg, #2b8a3e 0%, #1b5e20 100%)';
+            var txt = btnEl.querySelector('.play-text');
+            var icn = btnEl.querySelector('.play-icon');
+            if (txt) txt.textContent = 'Playing 🎶';
+            if (icn) icn.textContent = '🔊';
+        }
+
         if (audio) {
+            audio.pause();
+            audio.muted = false;
+            audio.volume = 1.0;
             audio.src = `/media/music/${encodeURIComponent(file)}`;
             audio.currentTime = 0;
             playAudio();

@@ -110,8 +110,8 @@
             </div>
 
             <div style="width: 100%;">
-                <button onclick="setGlobalBgMusic({{ t.file|tojson }}, {{ t.title|tojson }})" class="music-play-btn">
-                    <span>▶️</span> Play Song
+                <button onclick="setGlobalBgMusic({{ t.file|tojson }}, {{ t.title|tojson }}, this)" class="music-play-btn">
+                    <span class="play-icon">▶️</span> <span class="play-text">Play Song</span>
                 </button>
                 {% if session.get('logged_in') %}
                 <a href="{{ url_for('music.set_background', music_id=t.id) }}" style="display: block; font-size: 11px; color: var(--rose); margin-top: 8px; text-decoration: underline;">
