@@ -131,6 +131,15 @@ def create_app():
     }
 
     # ==================================================
+    # ULTRA-FAST ASSET CACHING HANDLER
+    # ==================================================
+    @app.after_request
+    def add_cache_header(response):
+        if request.path.startswith('/static/') or request.path.startswith('/media/'):
+            response.headers['Cache-Control'] = 'public, max-age=31536000'
+        return response
+
+    # ==================================================
     # DATABASE
     # ==================================================
 
