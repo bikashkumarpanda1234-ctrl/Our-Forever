@@ -28,7 +28,7 @@
             <div class="hero-photo-frame" style="position: relative; height: 560px; overflow: hidden; transform: rotate(1deg);">
                 {% for m in memories[:5] %}
                 <div class="hero-slide {% if loop.first %}active{% endif %}">
-                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}">
+                    <img src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="eager" fetchpriority="high" decoding="async">
                     <div class="hero-photo-caption">
                         <span>♥</span> {{ m.title }}
                     </div>
@@ -243,9 +243,11 @@
                 Our absolute favorite video capturing pure happiness, silly laughs, and magical moments together. Press play to experience our joy in crisp HD! 🎬✨
             </p>
             
-            <div onclick="openVideoLightbox('/media/videos/public/baby6.mp4', 'Fun & Silly Times 🌺', 'Our favorite video capturing pure happiness, silly laughs, and magical moments together.')" style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #11080c; cursor: pointer; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 255, 255, 0.9); height: 420px; display: flex; align-items: center; justify-content: center;">
-                <video src="/media/videos/public/baby6.mp4#t=0.5" preload="metadata" playsinline webkit-playsinline style="width: 100%; height: 100%; object-fit: cover; pointer-events: none; opacity: 0.85;"></video>
-                <div style="position: absolute; width: 75px; height: 75px; background: rgba(255, 255, 255, 0.92); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--rose); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); transition: transform 0.3s ease;">▶</div>
+            <div style="position: relative; width: 100%; max-width: 850px; margin: 0 auto; border-radius: 26px; overflow: hidden; background: #000000; box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 255, 255, 0.9);">
+                <video controls preload="metadata" playsinline webkit-playsinline style="width: 100%; max-height: 500px; display: block; object-fit: contain; outline: none; background: #000;">
+                    <source src="/media/videos/public/baby6.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video playback.
+                </video>
             </div>
 
             <div style="margin-top: 20px; font-size: 13px; color: var(--rose); font-weight: 600; font-style: italic;">
