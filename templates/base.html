@@ -2565,7 +2565,7 @@ main {
         if (pillTitle) pillTitle.textContent = title;
 
         if (audio) {
-            audio.src = '/media/music/' + file;
+            audio.src = '/media/music/' + encodeURIComponent(file);
             audio.currentTime = 0;
             audio.play().then(function() {
                 if (pillStatus) pillStatus.textContent = '⏸️';

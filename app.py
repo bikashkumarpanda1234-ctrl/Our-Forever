@@ -529,16 +529,12 @@ def create_app():
     @app.route("/media/music/<path:filename>")
     def music_file(filename):
         from models.music import Music
-        public_track = Music.query.filter_by(
-            file=filename,
-            is_private=False
-        ).first()
         private_track = Music.query.filter_by(
             file=filename,
             is_private=True
         ).first()
 
-        if not public_track and private_track and not session.get("private_unlocked"):
+        if private_track and not session.get("private_unlocked"):
             return redirect(url_for("private.unlock", next=request.url))
 
         mime_types = {
@@ -551,7 +547,7 @@ def create_app():
             ".opus": "audio/opus"
         }
         ext = os.path.splitext(filename)[1].lower()
-        mime = mime_types.get(ext, None)
+        mime = mime_types.get(ext, "audio/mpeg")
 
         response = send_from_directory(
             app.config["MUSIC_FOLDER"],
@@ -560,7 +556,7 @@ def create_app():
             mimetype=mime
         )
         response.headers["Accept-Ranges"] = "bytes"
-        response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        response.headers["Cache-Control"] = "public, max-age=31536000"
         return response
 
     # ==================================================

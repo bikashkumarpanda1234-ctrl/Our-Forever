@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         savedTime = 0;
 
         if (audio) {
-            audio.src = `/media/music/${file}`;
+            audio.src = `/media/music/${encodeURIComponent(file)}`;
             audio.currentTime = 0;
             playAudio();
         }
