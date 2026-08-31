@@ -2930,29 +2930,48 @@ main {
             if (e.key === "Escape") closeVideoLightbox();
         }
     });
+<style>
+/* PROFESSIONAL FALLING FLOWERS ANIMATION ("FULLA KHASUTHIBA") */
+@keyframes proFlowerFall {
+    0% {
+        top: -60px;
+        opacity: 1;
+        transform: rotate(0deg) scale(0.8);
+    }
+    85% {
+        opacity: 0.95;
+    }
+    100% {
+        top: 108vh;
+        opacity: 0;
+        transform: rotate(360deg) scale(1.3);
+    }
+}
+</style>
 <script>
-// PURE SIMPLE FAIL-SAFE FALLING FLOWERS SHOWER ("FULLA KHASUTHIBA")
-(function startFallingFlowers() {
-    function createFlower() {
+// PROFESSIONAL FAIL-SAFE FALLING FLOWERS SHOWER
+(function startProFallingFlowers() {
+    function spawnFlower() {
         var f = document.createElement('div');
         var flowers = ['🌸', '🌹', '🌺', '🥀', '🌷', '💐', '✨', '💖'];
-        f.innerHTML = flowers[Math.floor(Math.random() * flowers.length)];
-        f.style.cssText = 'position: fixed !important; top: -50px !important; left: ' + (Math.random() * 95) + 'vw !important; font-size: ' + (22 + Math.random() * 26) + 'px !important; z-index: 99999999 !important; pointer-events: none !important; transition: transform 6s linear, opacity 6s linear !important; opacity: 1 !important;';
+        var flower = flowers[Math.floor(Math.random() * flowers.length)];
+        var left = Math.random() * 95;
+        var duration = 4 + Math.random() * 4;
+        var size = 22 + Math.random() * 24;
+
+        f.innerHTML = flower;
+        f.style.cssText = 'position: fixed !important; top: -60px; left: ' + left + 'vw; font-size: ' + size + 'px; z-index: 99999999 !important; pointer-events: none !important; animation: proFlowerFall ' + duration + 's linear forwards !important;';
         (document.body || document.documentElement).appendChild(f);
 
         setTimeout(function() {
-            f.style.transform = 'translateY(' + (window.innerHeight + 120) + 'px) rotate(' + (Math.random() * 360) + 'deg)';
-        }, 50);
-
-        setTimeout(function() {
             if (f.parentNode) f.parentNode.removeChild(f);
-        }, 6500);
+        }, duration * 1000);
     }
 
-    for (var i = 0; i < 15; i++) {
-        setTimeout(createFlower, i * 100);
+    for (var i = 0; i < 12; i++) {
+        setTimeout(spawnFlower, i * 100);
     }
-    setInterval(createFlower, 280);
+    setInterval(spawnFlower, 250);
 })();
 </script>
 <script src="{{ url_for('static', filename='js/main.js') }}"></script>
