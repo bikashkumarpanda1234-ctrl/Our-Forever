@@ -2539,15 +2539,27 @@ main {
 <body>
 
 <!-- SPLASH OVERLAY -->
-<div id="splash-overlay" class="splash-overlay">
-    <div class="splash-content">
+<div id="splash-overlay" class="splash-overlay" onclick="dismissSplash()">
+    <div class="splash-content" onclick="event.stopPropagation()">
         <div class="splash-heart">💖</div>
         <h1>Welcome to Our Forever</h1>
         <p>Tap Enter to open our special memory book with our background soundtrack. 🎵</p>
-        <button id="enter-site-btn" class="btn">Enter Our Space ❤️</button>
+        <button id="enter-site-btn" class="btn" onclick="dismissSplash()">Enter Our Space ❤️</button>
     </div>
 </div>
 <script>
+    function dismissSplash() {
+        var splash = document.getElementById('splash-overlay');
+        if (splash) {
+            splash.classList.add('hidden');
+            splash.style.display = 'none';
+            sessionStorage.setItem('entered_site', 'true');
+        }
+        var audio = document.getElementById('global-bg-audio');
+        if (audio && audio.paused && localStorage.getItem('bg_music_playing') !== 'false') {
+            audio.play().catch(function(e){ console.log("Audio play on click", e); });
+        }
+    }
     if (sessionStorage.getItem('entered_site') === 'true') {
         var splash = document.getElementById('splash-overlay');
         if (splash) splash.style.display = 'none';
