@@ -479,22 +479,6 @@
 
 </div>
 
-<!-- LIGHTBOX MODAL ELEMENT -->
-<div id="lightbox-modal" class="lightbox-modal" onclick="closeLightboxOnBackdrop(event)">
-    <div class="lightbox-content">
-        <div class="lightbox-close" onclick="closeLightbox()">✕</div>
-        <div class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</div>
-        <div class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</div>
-        <div class="lightbox-img-wrapper">
-            <img id="lightbox-img" src="" alt="Memory preview">
-        </div>
-        <div class="lightbox-caption">
-            <h3 id="lightbox-title">Memory Title</h3>
-            <p id="lightbox-desc">Memory Description</p>
-        </div>
-    </div>
-</div>
-
 <!-- FLOATING BACK TO TOP HEART BUTTON -->
 <div id="back-to-top" class="back-to-top" onclick="scrollToTop()">
     ♥
@@ -518,15 +502,55 @@
         if (index < 0 || index >= allMemories.length) return;
         currentLightboxIndex = index;
         const memory = allMemories[index];
-        document.getElementById("lightbox-img").src = memory.image;
-        document.getElementById("lightbox-title").textContent = memory.title;
-        document.getElementById("lightbox-desc").textContent = memory.description;
-        document.getElementById("lightbox-modal").classList.add("active");
+        const modal = document.getElementById("lightbox-modal");
+        const img = document.getElementById("lightbox-img");
+        const titleEl = document.getElementById("lightbox-title");
+        const descEl = document.getElementById("lightbox-desc");
+        const content = document.querySelector("#lightbox-modal .lightbox-content");
+        const wrapper = document.querySelector("#lightbox-modal .lightbox-img-wrapper");
+        const caption = document.querySelector("#lightbox-modal .lightbox-caption");
+
+        if (img) { img.src = memory.image; img.style.setProperty("display", "block", "important"); }
+        if (titleEl) { titleEl.textContent = memory.title; titleEl.style.setProperty("display", "block", "important"); }
+        if (descEl) { descEl.textContent = memory.description; descEl.style.setProperty("display", "block", "important"); }
+        if (content) content.style.setProperty("display", "block", "important");
+        if (wrapper) wrapper.style.setProperty("display", "flex", "important");
+        if (caption) caption.style.setProperty("display", "block", "important");
+
+        if (modal) {
+            modal.style.setProperty("display", "flex", "important");
+            modal.style.setProperty("visibility", "visible", "important");
+            modal.style.setProperty("opacity", "1", "important");
+            modal.style.setProperty("pointer-events", "auto", "important");
+            modal.classList.add("active");
+        }
         document.body.style.overflow = "hidden";
     }
 
     function closeLightbox() {
-        document.getElementById("lightbox-modal").classList.remove("active");
+        const modal = document.getElementById("lightbox-modal");
+        const img = document.getElementById("lightbox-img");
+        const titleEl = document.getElementById("lightbox-title");
+        const descEl = document.getElementById("lightbox-desc");
+        const content = document.querySelector("#lightbox-modal .lightbox-content");
+        const wrapper = document.querySelector("#lightbox-modal .lightbox-img-wrapper");
+        const caption = document.querySelector("#lightbox-modal .lightbox-caption");
+
+        if (modal) {
+            modal.classList.remove("active");
+            modal.style.setProperty("display", "none", "important");
+            modal.style.setProperty("visibility", "hidden", "important");
+            modal.style.setProperty("opacity", "0", "important");
+            modal.style.setProperty("pointer-events", "none", "important");
+        }
+
+        if (content) content.style.setProperty("display", "none", "important");
+        if (wrapper) wrapper.style.setProperty("display", "none", "important");
+        if (caption) caption.style.setProperty("display", "none", "important");
+        if (img) img.style.setProperty("display", "none", "important");
+        if (titleEl) titleEl.style.setProperty("display", "none", "important");
+        if (descEl) descEl.style.setProperty("display", "none", "important");
+
         document.body.style.overflow = "auto";
     }
 

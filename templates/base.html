@@ -2624,6 +2624,22 @@ main {
     <span id="year"></span>
 </footer>
 
+<!-- GLOBAL PHOTO LIGHTBOX MODAL ELEMENT -->
+<div id="lightbox-modal" class="lightbox-modal" style="display: none !important; visibility: hidden !important; opacity: 0 !important; position: fixed !important; pointer-events: none !important;" onclick="closeLightboxOnBackdrop(event)">
+    <div class="lightbox-content" style="display: none !important;">
+        <div class="lightbox-close" onclick="closeLightbox()">✕</div>
+        <div class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</div>
+        <div class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</div>
+        <div class="lightbox-img-wrapper" style="display: none !important;">
+            <img id="lightbox-img" src="" alt="Memory preview" style="display: none !important;">
+        </div>
+        <div class="lightbox-caption" style="display: none !important;">
+            <h3 id="lightbox-title" style="display: none !important;">Memory Title</h3>
+            <p id="lightbox-desc" style="display: none !important;">Memory Description</p>
+        </div>
+    </div>
+</div>
+
 <!-- GLOBAL FULLSCREEN VIDEO LIGHTBOX MODAL -->
 <div id="video-lightbox-modal" class="video-lightbox-modal" style="display: none !important; visibility: hidden !important; opacity: 0 !important; position: fixed !important; pointer-events: none !important;" onclick="closeVideoLightboxOnBackdrop(event)">
     <div class="video-lightbox-container" style="display: none !important;">
