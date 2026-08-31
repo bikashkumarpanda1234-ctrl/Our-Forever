@@ -231,18 +231,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Expose global function to change background music from the playlist page
     window.setGlobalBgMusic = function(file, title) {
-        localStorage.setItem('bg_music_file', file);
-        localStorage.setItem('bg_music_title', title);
-        localStorage.setItem('bg_music_playing', 'true');
-        localStorage.setItem('bg_music_time', '0');
-        
+        try {
+            localStorage.setItem('bg_music_file', file);
+            localStorage.setItem('bg_music_title', title);
+            localStorage.setItem('bg_music_playing', 'true');
+            localStorage.setItem('bg_music_time', '0');
+        } catch(e) {}
+
         songFile = file;
         songTitle = title;
         savedTime = 0;
-        
-        audio.src = `/media/music/${file}`;
-        audio.currentTime = 0;
-        playAudio();
+
+        if (audio) {
+            audio.src = `/media/music/${file}`;
+            audio.currentTime = 0;
+            playAudio();
+        }
     };
 
 });

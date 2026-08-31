@@ -2548,6 +2548,35 @@ main {
     </div>
 </div>
 <script>
+    window.setGlobalBgMusic = function(file, title) {
+        try {
+            localStorage.setItem('bg_music_file', file);
+            localStorage.setItem('bg_music_title', title);
+            localStorage.setItem('bg_music_playing', 'true');
+            localStorage.setItem('bg_music_time', '0');
+        } catch(e) {}
+
+        var audio = document.getElementById('global-bg-audio');
+        var pillTitle = document.getElementById('player-song-title');
+        var pillStatus = document.getElementById('player-status-icon');
+        var musicIcon = document.getElementById('music-icon');
+        var heartPulse = document.getElementById('heart-pulse');
+
+        if (pillTitle) pillTitle.textContent = title;
+
+        if (audio) {
+            audio.src = '/media/music/' + file;
+            audio.currentTime = 0;
+            audio.play().then(function() {
+                if (pillStatus) pillStatus.textContent = '⏸️';
+                if (musicIcon) musicIcon.style.animation = 'musicRotate 3s linear infinite';
+                if (heartPulse) heartPulse.style.animation = 'privateHeartbeat 1.2s infinite';
+            }).catch(function(err) {
+                console.log("Play error:", err);
+            });
+        }
+    };
+
     function dismissSplash(e) {
         if (e) {
             e.preventDefault();
