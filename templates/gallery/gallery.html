@@ -14,7 +14,7 @@
         {% for m in memories %}
         <article class="card">
             <a href="{{ url_for('gallery.photo', memory_id=m.id) }}">
-                <img class="gallery-img" src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}">
+                <img class="gallery-img" src="/media/photos/public/{{ m.image }}" alt="{{ m.title }}" loading="lazy" decoding="async">
             </a>
             <h3>{{ m.title }}</h3>
             {% if m.created_at %}
