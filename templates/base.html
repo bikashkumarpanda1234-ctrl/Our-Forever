@@ -2618,13 +2618,58 @@ main {
     <span id="year"></span>
 </footer>
 
+<!-- GLOBAL FULLSCREEN VIDEO LIGHTBOX MODAL -->
+<div id="video-lightbox-modal" class="video-lightbox-modal" style="display: none !important;" onclick="closeVideoLightboxOnBackdrop(event)">
+    <div class="video-lightbox-container">
+        <div class="video-lightbox-close" onclick="closeVideoLightbox()">✕</div>
+        <div class="video-lightbox-player-wrapper">
+            <video id="video-lightbox-player" controls playsinline webkit-playsinline></video>
+        </div>
+        <div class="video-lightbox-info">
+            <h3 id="video-lightbox-title" style="font-family: 'Cormorant Garamond', serif; font-size: 26px; margin: 0 0 6px; color: var(--rose);">Video Title</h3>
+            <p id="video-lightbox-desc" style="margin: 0; color: #ffebf0; font-size: 14px;">Video Description</p>
+        </div>
+    </div>
+</div>
+
 <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+    function openVideoLightbox(videoUrl, title, desc) {
+        const modal = document.getElementById("video-lightbox-modal");
+        const player = document.getElementById("video-lightbox-player");
+        if (!modal || !player) return;
+        player.src = videoUrl;
+        document.getElementById("video-lightbox-title").textContent = title || "";
+        document.getElementById("video-lightbox-desc").textContent = desc || "";
+        modal.style.setProperty("display", "flex", "important");
+        modal.classList.add("active");
+        document.body.style.overflow = "hidden";
+        player.play().catch(err => console.log("Video playback ready", err));
+    }
+
+    function closeVideoLightbox() {
+        const modal = document.getElementById("video-lightbox-modal");
+        const player = document.getElementById("video-lightbox-player");
+        if (!modal || !player) return;
+        player.pause();
+        player.currentTime = 0;
+        player.src = "";
+        modal.classList.remove("active");
+        modal.style.setProperty("display", "none", "important");
+        document.body.style.overflow = "auto";
+    }
+
+    function closeVideoLightboxOnBackdrop(e) {
+        if (e.target.id === "video-lightbox-modal") {
+            closeVideoLightbox();
+        }
+    }
+
+    document.addEventListener("keydown", function(e) {
+        const modal = document.getElementById("video-lightbox-modal");
+        if (modal && modal.classList.contains("active")) {
+            if (e.key === "Escape") closeVideoLightbox();
+        }
+    });
 </script>
-
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-<script src="{{ url_for('static', filename='js/animations.js') }}"></script>
-{% block extra_js %}{% endblock %}
-
 </body>
 </html>
