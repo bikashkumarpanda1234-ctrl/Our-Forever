@@ -2312,3 +2312,45 @@ main {
     visibility: hidden !important;
     pointer-events: none !important;
 }
+
+/* ROMANTIC FLOATING HEARTS & SCROLL FADE-UP ANIMATIONS */
+@keyframes floatUpHeart {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.6) rotate(0deg);
+    }
+    20% {
+        opacity: 0.75;
+    }
+    80% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-105vh) scale(1.2) rotate(45deg);
+    }
+}
+
+@keyframes musicRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes privateHeartbeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.25); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.25); }
+    70% { transform: scale(1); }
+}
+
+.fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

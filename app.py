@@ -29,6 +29,7 @@ def create_app():
     # ==================================================
 
     app.config.from_object(Config)
+    app.config["MAX_CONTENT_LENGTH"] = 300 * 1024 * 1024  # 300 MB Upload Limit
 
     # ==================================================
     # MEDIA FOLDERS

@@ -2548,6 +2548,49 @@ main {
     </div>
 </div>
 <script>
+    // Floating Romantic Heart Particle Animation Generator
+    document.addEventListener('DOMContentLoaded', function() {
+        var container = document.createElement('div');
+        container.id = 'floating-hearts-container';
+        container.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; overflow: hidden; z-index: 1;';
+        document.body.appendChild(container);
+
+        var heartSymbols = ['❤️', '💖', '💕', '🌸', '✨', '💗', '🌹'];
+        
+        function spawnHeart() {
+            var heart = document.createElement('span');
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            var startLeft = Math.random() * 95;
+            var duration = 6 + Math.random() * 6;
+            var size = 14 + Math.random() * 16;
+
+            heart.style.cssText = 'position: absolute; bottom: -40px; left: ' + startLeft + 'vw; font-size: ' + size + 'px; opacity: 0; transform: scale(0.6); animation: floatUpHeart ' + duration + 's ease-in-out forwards;';
+            container.appendChild(heart);
+
+            setTimeout(function() {
+                if (heart.parentNode) {
+                    heart.parentNode.removeChild(heart);
+                }
+            }, duration * 1000);
+        }
+
+        setInterval(spawnHeart, 1200);
+
+        // Scroll Fade-Up Intersection Observer
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.home-memory-card, .card, .home-shayari-section, .home-section-heading, .music-card').forEach(function(el) {
+            el.classList.add('fade-up');
+            observer.observe(el);
+        });
+    });
+
     // Global single-audio listener: ensure ONLY ONE audio/video plays at any time!
     document.addEventListener('play', function(e) {
         var playingEl = e.target;
