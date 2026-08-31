@@ -629,7 +629,7 @@
     });
 </script>
 <!-- FULLSCREEN VIDEO LIGHTBOX MODAL FOR HOME PAGE -->
-<div id="video-lightbox-modal" class="video-lightbox-modal" onclick="closeVideoLightboxOnBackdrop(event)">
+<div id="video-lightbox-modal" class="video-lightbox-modal" style="display: none;" onclick="closeVideoLightboxOnBackdrop(event)">
     <div class="video-lightbox-container">
         <div class="video-lightbox-close" onclick="closeVideoLightbox()">✕</div>
         <div class="video-lightbox-player-wrapper">
@@ -644,21 +644,25 @@
 
 <script>
     function openVideoLightbox(videoUrl, title, desc) {
+        const modal = document.getElementById("video-lightbox-modal");
         const player = document.getElementById("video-lightbox-player");
         player.src = videoUrl;
         document.getElementById("video-lightbox-title").textContent = title;
         document.getElementById("video-lightbox-desc").textContent = desc || "";
-        document.getElementById("video-lightbox-modal").classList.add("active");
+        modal.style.display = "flex";
+        modal.classList.add("active");
         document.body.style.overflow = "hidden";
         player.play().catch(err => console.log("Video playback ready", err));
     }
 
     function closeVideoLightbox() {
+        const modal = document.getElementById("video-lightbox-modal");
         const player = document.getElementById("video-lightbox-player");
         player.pause();
         player.currentTime = 0;
         player.src = "";
-        document.getElementById("video-lightbox-modal").classList.remove("active");
+        modal.classList.remove("active");
+        modal.style.display = "none";
         document.body.style.overflow = "auto";
     }
 
