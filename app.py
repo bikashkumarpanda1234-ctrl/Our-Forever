@@ -530,7 +530,7 @@ def create_app():
     def music_file(filename):
         mime_types = {
             ".mp3": "audio/mpeg",
-            ".webm": "audio/webm",
+            ".webm": "audio/webm; codecs=opus",
             ".m4a": "audio/mp4",
             ".ogg": "audio/ogg",
             ".wav": "audio/wav",
