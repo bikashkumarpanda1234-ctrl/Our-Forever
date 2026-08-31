@@ -2354,3 +2354,21 @@ main {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* FALLING ROSE PETALS ANIMATION ("FULLA KHASUTHIDA") */
+@keyframes fallRosePetal {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) rotate(0deg) scale(0.6);
+    }
+    10% {
+        opacity: 0.95;
+    }
+    90% {
+        opacity: 0.95;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(108vh) rotate(360deg) scale(1.2);
+    }
+}

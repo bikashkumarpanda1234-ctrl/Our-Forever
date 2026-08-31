@@ -2548,12 +2548,55 @@ main {
     </div>
 </div>
 <script>
-    // Floating Romantic Heart Particle Animation Generator
-    document.addEventListener('DOMContentLoaded', function() {
-        var container = document.createElement('div');
-        container.id = 'floating-hearts-container';
-        container.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; overflow: hidden; z-index: 1;';
-        document.body.appendChild(container);
+    // Tab/Browser Close Auto-Logout Manager
+    {% if session.get('logged_in') or session.get('private_unlocked') %}
+    if (!sessionStorage.getItem('active_admin_session')) {
+        window.location.href = "{{ url_for('private.lock') }}";
+    } else {
+        sessionStorage.setItem('active_admin_session', 'true');
+    }
+    {% endif %}
+
+    // Falling Rose Petals Particle Generator ("Fulla Khasuthiba")
+    (function initFallingPetals() {
+        var container = document.getElementById('falling-petals-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'falling-petals-container';
+            container.style.cssText = 'position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; pointer-events: none !important; overflow: hidden !important; z-index: 999999 !important;';
+            (document.body || document.documentElement).appendChild(container);
+        }
+
+        var petalSymbols = ['🌸', '🌹', '🌺', '🥀', '🌷', '💐', '✨', '💖'];
+        
+        function spawnPetal() {
+            var petal = document.createElement('span');
+            petal.textContent = petalSymbols[Math.floor(Math.random() * petalSymbols.length)];
+            var startLeft = Math.random() * 95;
+            var duration = 5 + Math.random() * 5;
+            var size = 18 + Math.random() * 20;
+
+            petal.style.cssText = 'position: absolute !important; top: -40px !important; left: ' + startLeft + 'vw !important; font-size: ' + size + 'px !important; opacity: 0; pointer-events: none !important; animation: fallRosePetal ' + duration + 's ease-in-out forwards !important;';
+            container.appendChild(petal);
+
+            setTimeout(function() {
+                if (petal.parentNode) {
+                    petal.parentNode.removeChild(petal);
+                }
+            }, duration * 1000);
+        }
+
+        for (var i = 0; i < 8; i++) {
+            setTimeout(spawnPetal, i * 150);
+        }
+        setInterval(spawnPetal, 350);
+    })();
+
+        // Floating Heart Particles Generator
+        var heartContainer = document.createElement('div');
+        heartContainer.id = 'floating-hearts-container';
+        heartContainer.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; overflow: hidden; z-index: 1;';
+        document.body.appendChild(heartContainer);
 
         var heartSymbols = ['❤️', '💖', '💕', '🌸', '✨', '💗', '🌹'];
         
@@ -2565,7 +2608,7 @@ main {
             var size = 14 + Math.random() * 16;
 
             heart.style.cssText = 'position: absolute; bottom: -40px; left: ' + startLeft + 'vw; font-size: ' + size + 'px; opacity: 0; transform: scale(0.6); animation: floatUpHeart ' + duration + 's ease-in-out forwards;';
-            container.appendChild(heart);
+            heartContainer.appendChild(heart);
 
             setTimeout(function() {
                 if (heart.parentNode) {

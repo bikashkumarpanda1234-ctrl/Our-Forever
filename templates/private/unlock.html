@@ -46,6 +46,7 @@ Private Memories 🔐
         <form
             method="POST"
             action="{{ url_for('private.unlock') }}"
+            onsubmit="sessionStorage.setItem('active_admin_session', 'true')"
         >
 
             {% if next %}
