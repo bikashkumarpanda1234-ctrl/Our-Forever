@@ -2895,9 +2895,16 @@ main {
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
 
-        const promise = player.play();
-        if (promise !== undefined) {
-            promise.catch(err => console.log("Video playback ready for tap:", err));
+        // Mobile autoplay policy handling
+        const playPromise = player.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(err => {
+                console.log("Autoplay unmuted blocked on mobile - trying fallback:", err);
+                player.muted = true;
+                player.play().then(() => {
+                    player.muted = false;
+                }).catch(e => console.log("Ready for mobile user tap:", e));
+            });
         }
     }
 

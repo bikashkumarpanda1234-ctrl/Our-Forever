@@ -21,8 +21,9 @@
         cursor: pointer;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
     }
-    .video-card:hover {
+    .video-card:hover, .video-card:active {
         transform: translateY(-6px);
         box-shadow: 0 18px 45px rgba(90, 35, 55, 0.15);
     }
@@ -36,12 +37,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        pointer-events: none;
     }
     .video-card-thumb video {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        pointer-events: none;
+        pointer-events: none !important;
         display: block;
     }
     .play-overlay-icon {
@@ -58,7 +60,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
         z-index: 2;
-        pointer-events: none;
+        pointer-events: none !important;
         padding-left: 4px;
     }
     .video-card:hover .play-overlay-icon,
@@ -84,12 +86,12 @@
         margin: 0 0 8px;
     }
     .tap-hint {
-        font-size: 12px;
+        font-size: 13px;
         color: var(--rose);
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 6px;
     }
 
     /* FULLSCREEN VIDEO LIGHTBOX MODAL */
@@ -99,9 +101,9 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(15, 10, 15, 0.94);
+        background: rgba(15, 10, 15, 0.96);
         backdrop-filter: blur(12px);
-        z-index: 999999;
+        z-index: 9999999;
         display: none !important;
         align-items: center;
         justify-content: center;
@@ -130,9 +132,9 @@
         position: absolute;
         top: 15px;
         right: 20px;
-        width: 42px;
-        height: 42px;
-        background: rgba(255, 255, 255, 0.2);
+        width: 44px;
+        height: 44px;
+        background: rgba(255, 255, 255, 0.25);
         color: #ffffff;
         border-radius: 50%;
         display: flex;
@@ -140,7 +142,7 @@
         justify-content: center;
         font-size: 22px;
         cursor: pointer;
-        z-index: 10;
+        z-index: 100;
         transition: background 0.25s ease;
     }
     .video-lightbox-close:hover {
@@ -172,7 +174,7 @@
         <div class="eyebrow">CAPTURED IN MOTION</div>
         <h2>Our Videos 🎬</h2>
         <p style="color: var(--deep-soft); font-size: 15px; margin-top: 8px;">
-            Tap any video to expand and play in full-screen gallery view! ❤️
+            Tap any video card to expand and play in full-screen gallery view! ❤️
         </p>
     </div>
 
@@ -189,7 +191,7 @@
         {% for v in videos %}
         <article class="video-card" onclick="openVideoLightbox('/media/videos/public/{{ v.path }}', {{ v.title|tojson }}, {{ (v.description or '')|tojson }})">
             <div class="video-card-thumb">
-                <video src="/media/videos/public/{{ v.path }}" preload="metadata" playsinline webkit-playsinline muted></video>
+                <video src="/media/videos/public/{{ v.path }}" preload="metadata" playsinline webkit-playsinline muted style="pointer-events: none !important;"></video>
                 <div class="play-overlay-icon">▶</div>
             </div>
             <div class="video-card-content">
