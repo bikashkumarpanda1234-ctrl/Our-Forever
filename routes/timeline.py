@@ -19,8 +19,8 @@ def timeline():
 @timeline_bp.route("/add", methods=["GET", "POST"])
 def add_timeline():
     if not session.get("logged_in"):
-        flash("Please log in to manage timeline events. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        flash("Please log in as admin to manage timeline events. ❤️", "error")
+        return redirect(url_for("auth.login", next=request.url))
 
     if request.method == "POST":
         date = request.form.get("date", "").strip()

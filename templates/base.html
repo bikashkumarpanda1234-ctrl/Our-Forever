@@ -2871,7 +2871,16 @@ main {
         const descEl = document.getElementById("video-lightbox-desc");
 
         if (!modal || !player) return;
+
+        // Pause background audio cleanly first
+        const bgAudio = document.getElementById("global-bg-audio");
+        if (bgAudio && !bgAudio.paused) {
+            bgAudio.pause();
+        }
+
         player.src = videoUrl;
+        player.load();
+
         if (titleEl) { titleEl.textContent = title || ""; titleEl.style.setProperty("display", "block", "important"); }
         if (descEl) { descEl.textContent = desc || ""; descEl.style.setProperty("display", "block", "important"); }
         if (info) info.style.setProperty("display", "block", "important");
@@ -2885,7 +2894,11 @@ main {
         modal.style.setProperty("pointer-events", "auto", "important");
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
-        player.play().catch(err => console.log("Video playback ready", err));
+
+        const promise = player.play();
+        if (promise !== undefined) {
+            promise.catch(err => console.log("Video playback ready for tap:", err));
+        }
     }
 
     function closeVideoLightbox() {

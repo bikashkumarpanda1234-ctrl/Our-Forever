@@ -32,7 +32,7 @@ def api_playlist():
 def add_music():
     if not session.get("logged_in"):
         flash("Please log in to manage music. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        return redirect(url_for("auth.login", next=request.url))
 
     if request.method == "POST":
         title = request.form.get("title", "").strip()
@@ -108,7 +108,7 @@ def add_music():
 def set_background(music_id):
     if not session.get("logged_in"):
         flash("Please log in as admin first. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        return redirect(url_for("auth.login", next=request.url))
 
     # Reset all other background flags
     Music.query.update({Music.is_background: False})

@@ -22,7 +22,7 @@ def gifts():
 def add_gift():
     if not session.get("logged_in"):
         flash("Please log in as admin to add gifts. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        return redirect(url_for("auth.login", next=request.url))
 
     if request.method == "POST":
         title = request.form.get("title", "").strip()

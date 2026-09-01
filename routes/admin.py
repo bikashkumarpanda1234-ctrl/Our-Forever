@@ -24,7 +24,7 @@ def allowed_audio(filename):
 def check_admin_login():
     if not session.get("logged_in"):
         flash("Please log in as admin first. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        return redirect(url_for("auth.login", next=request.url))
 
 def admin_required():
     return session.get("logged_in")
@@ -60,13 +60,13 @@ def dashboard():
 
 @admin_bp.route("/memories")
 def memories():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     items = Memory.query.order_by(Memory.id.desc()).all()
     return render_template("admin/memories.html", memories=items)
 
 @admin_bp.route("/add-memory", methods=["GET", "POST"])
 def add_memory():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     if request.method == "POST":
         title = request.form.get("title", "").strip()
         description = request.form.get("description", "").strip()
@@ -112,7 +112,7 @@ def add_memory():
 
 @admin_bp.route("/edit-memory/<int:memory_id>", methods=["GET", "POST"])
 def edit_memory(memory_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     m = Memory.query.get_or_404(memory_id)
     if request.method == "POST":
         m.title = request.form.get("title", m.title).strip()
@@ -124,7 +124,7 @@ def edit_memory(memory_id):
 
 @admin_bp.route("/delete-memory/<int:memory_id>")
 def delete_memory(memory_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     m = Memory.query.get_or_404(memory_id)
     # Delete associated file
     if m.image:
@@ -147,13 +147,13 @@ def delete_memory(memory_id):
 
 @admin_bp.route("/videos")
 def videos():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     items = Video.query.order_by(Video.id.desc()).all()
     return render_template("admin/videos.html", videos=items)
 
 @admin_bp.route("/edit-video/<int:video_id>", methods=["GET", "POST"])
 def edit_video(video_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     v = Video.query.get_or_404(video_id)
     if request.method == "POST":
         v.title = request.form.get("title", v.title).strip()
@@ -165,7 +165,7 @@ def edit_video(video_id):
 
 @admin_bp.route("/delete-video/<int:video_id>")
 def delete_video(video_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     v = Video.query.get_or_404(video_id)
     if v.path:
         folder_key = "PRIVATE_VIDEO_FOLDER" if v.is_private else "PUBLIC_VIDEO_FOLDER"
@@ -187,13 +187,13 @@ def delete_video(video_id):
 
 @admin_bp.route("/music")
 def music():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     items = Music.query.order_by(Music.id.desc()).all()
     return render_template("admin/music.html", music=items)
 
 @admin_bp.route("/edit-music/<int:music_id>", methods=["GET", "POST"])
 def edit_music(music_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     m = Music.query.get_or_404(music_id)
     if request.method == "POST":
         m.title = request.form.get("title", m.title).strip()
@@ -235,7 +235,7 @@ def edit_music(music_id):
 
 @admin_bp.route("/delete-music/<int:music_id>")
 def delete_music(music_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     m = Music.query.get_or_404(music_id)
     if m.file:
         file_path = os.path.join(current_app.config["MUSIC_FOLDER"], m.file)
@@ -263,13 +263,13 @@ def delete_music(music_id):
 
 @admin_bp.route("/timeline")
 def timeline():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     items = Timeline.query.order_by(Timeline.date.desc()).all()
     return render_template("admin/timeline.html", timeline=items)
 
 @admin_bp.route("/edit-timeline/<int:timeline_id>", methods=["GET", "POST"])
 def edit_timeline(timeline_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     t = Timeline.query.get_or_404(timeline_id)
     if request.method == "POST":
         t.date = request.form.get("date", t.date).strip()
@@ -282,7 +282,7 @@ def edit_timeline(timeline_id):
 
 @admin_bp.route("/delete-timeline/<int:timeline_id>")
 def delete_timeline(timeline_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     t = Timeline.query.get_or_404(timeline_id)
     if t.image:
         file_path = os.path.join(current_app.config["PUBLIC_PHOTO_FOLDER"], t.image)
@@ -303,13 +303,13 @@ def delete_timeline(timeline_id):
 
 @admin_bp.route("/letters")
 def letters():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     items = Letter.query.order_by(Letter.id.desc()).all()
     return render_template("admin/letters.html", letters=items)
 
 @admin_bp.route("/edit-letter/<int:letter_id>", methods=["GET", "POST"])
 def edit_letter(letter_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     l = Letter.query.get_or_404(letter_id)
     if request.method == "POST":
         l.title = request.form.get("title", l.title).strip()
@@ -321,7 +321,7 @@ def edit_letter(letter_id):
 
 @admin_bp.route("/delete-letter/<int:letter_id>")
 def delete_letter(letter_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     l = Letter.query.get_or_404(letter_id)
     if l.image:
         file_path = os.path.join(current_app.config["PUBLIC_PHOTO_FOLDER"], l.image)
@@ -342,13 +342,13 @@ def delete_letter(letter_id):
 
 @admin_bp.route("/shayari")
 def shayari():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     items = Shayari.query.order_by(Shayari.id.desc()).all()
     return render_template("admin/shayari.html", shayaris=items)
 
 @admin_bp.route("/edit-shayari/<int:shayari_id>", methods=["GET", "POST"])
 def edit_shayari(shayari_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     s = Shayari.query.get_or_404(shayari_id)
     if request.method == "POST":
         s.title = request.form.get("title", s.title).strip()
@@ -360,7 +360,7 @@ def edit_shayari(shayari_id):
 
 @admin_bp.route("/delete-shayari/<int:shayari_id>")
 def delete_shayari(shayari_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     s = Shayari.query.get_or_404(shayari_id)
     if s.image:
         file_path = os.path.join(current_app.config["PUBLIC_PHOTO_FOLDER"], s.image)
@@ -382,14 +382,14 @@ def delete_shayari(shayari_id):
 
 @admin_bp.route("/gifts")
 def gifts():
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     from models.gift import Gift
     items = Gift.query.order_by(Gift.id.desc()).all()
     return render_template("admin/gifts.html", gifts=items)
 
 @admin_bp.route("/edit-gift/<int:gift_id>", methods=["GET", "POST"])
 def edit_gift(gift_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     from models.gift import Gift
     g = Gift.query.get_or_404(gift_id)
     if request.method == "POST":
@@ -403,7 +403,7 @@ def edit_gift(gift_id):
 
 @admin_bp.route("/delete-gift/<int:gift_id>")
 def delete_gift(gift_id):
-    if not admin_required(): return redirect(url_for("private.unlock"))
+    if not admin_required(): return redirect(url_for("auth.login"))
     from models.gift import Gift
     g = Gift.query.get_or_404(gift_id)
     if g.image:

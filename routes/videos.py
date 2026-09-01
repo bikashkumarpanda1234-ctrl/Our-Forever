@@ -19,8 +19,8 @@ def videos():
 @videos_bp.route("/add", methods=["GET", "POST"])
 def add_video():
     if not session.get("logged_in"):
-        flash("Please log in to manage videos. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        flash("Please log in as admin to upload videos. ❤️", "error")
+        return redirect(url_for("auth.login", next=request.url))
 
     if request.method == "POST":
         title = request.form.get("title", "").strip()

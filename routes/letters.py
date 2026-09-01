@@ -29,8 +29,8 @@ def letter(letter_id):
 @letters_bp.route("/add", methods=["GET", "POST"])
 def add_letter():
     if not session.get("logged_in"):
-        flash("Please log in to write letters. ❤️", "error")
-        return redirect(url_for("private.unlock", next=request.url))
+        flash("Please log in as admin to write letters. ❤️", "error")
+        return redirect(url_for("auth.login", next=request.url))
 
     if request.method == "POST":
         title = request.form.get("title", "").strip()

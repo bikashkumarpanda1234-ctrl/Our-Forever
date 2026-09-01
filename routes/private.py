@@ -35,8 +35,6 @@ def unlock():
         password = request.form.get("password", "")
         if password == current_app.config["PRIVATE_PASSWORD"]:
             session["private_unlocked"] = True
-            session["logged_in"] = True
-            session["username"] = "admin"
             next_url = request.form.get("next")
             if next_url:
                 return redirect(next_url)
@@ -211,7 +209,5 @@ def delete_note(note_id):
 @private_bp.route("/lock")
 def lock():
     session.pop("private_unlocked", None)
-    session.pop("logged_in", None)
-    session.pop("username", None)
     flash("Secret place locked. ❤️", "success")
     return redirect(url_for("private.unlock"))
