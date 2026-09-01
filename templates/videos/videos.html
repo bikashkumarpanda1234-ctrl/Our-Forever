@@ -6,20 +6,21 @@
 <style>
     .video-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 28px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
         margin-top: 30px;
     }
     .video-card {
         background: #ffffff;
         border-radius: 24px;
         overflow: hidden;
-        padding: 16px;
+        padding: 14px;
         box-shadow: 0 10px 30px rgba(90, 35, 55, 0.08);
         border: 1px solid rgba(255, 182, 193, 0.4);
         transition: transform 0.35s ease, box-shadow 0.35s ease;
-        display: flex;
-        flex-direction: column;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
     }
     .video-card:hover {
         transform: translateY(-6px);
@@ -27,24 +28,47 @@
     }
     .video-card-thumb {
         width: 100%;
-        height: 240px;
+        height: 250px;
         border-radius: 18px;
         overflow: hidden;
         background: #000000;
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .video-card-thumb video {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        pointer-events: none;
         display: block;
     }
-    .video-card-content {
-        padding: 16px 8px 6px;
-        flex-grow: 1;
+    .play-overlay-icon {
+        position: absolute;
+        width: 68px;
+        height: 68px;
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 50%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: var(--rose);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+        z-index: 2;
+        pointer-events: none;
+        padding-left: 4px;
+    }
+    .video-card:hover .play-overlay-icon,
+    .video-card:active .play-overlay-icon {
+        transform: scale(1.15);
+        background: var(--rose);
+        color: #ffffff;
+    }
+    .video-card-content {
+        padding: 14px 6px 4px;
     }
     .video-card-content h3 {
         font-family: 'Cormorant Garamond', serif;
@@ -57,30 +81,15 @@
         color: var(--deep-soft);
         font-size: 14px;
         line-height: 1.6;
-        margin: 0 0 14px;
+        margin: 0 0 8px;
     }
-    .video-card-actions {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-    .btn-lightbox {
-        background: rgba(200, 90, 120, 0.12);
+    .tap-hint {
+        font-size: 12px;
         color: var(--rose);
-        border: 1px solid rgba(200, 90, 120, 0.3);
-        padding: 8px 16px;
-        border-radius: 50px;
-        font-size: 13px;
         font-weight: 600;
-        cursor: pointer;
-        transition: background 0.25s ease, color 0.25s ease;
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 6px;
-    }
-    .btn-lightbox:hover {
-        background: var(--rose);
-        color: #ffffff;
+        gap: 4px;
     }
 
     /* FULLSCREEN VIDEO LIGHTBOX MODAL */
@@ -163,7 +172,7 @@
         <div class="eyebrow">CAPTURED IN MOTION</div>
         <h2>Our Videos 🎬</h2>
         <p style="color: var(--deep-soft); font-size: 15px; margin-top: 8px;">
-            Play any video directly or expand to full-screen HD view! ❤️
+            Tap any video to expand and play in full-screen gallery view! ❤️
         </p>
     </div>
 
@@ -178,20 +187,15 @@
     {% if videos %}
     <div class="video-grid">
         {% for v in videos %}
-        <article class="video-card">
+        <article class="video-card" onclick="openVideoLightbox('/media/videos/public/{{ v.path }}', {{ v.title|tojson }}, {{ (v.description or '')|tojson }})">
             <div class="video-card-thumb">
-                <video src="/media/videos/public/{{ v.path }}" controls preload="metadata" playsinline webkit-playsinline></video>
+                <video src="/media/videos/public/{{ v.path }}" preload="metadata" playsinline webkit-playsinline muted></video>
+                <div class="play-overlay-icon">▶</div>
             </div>
             <div class="video-card-content">
-                <div>
-                    <h3>{{ v.title }}</h3>
-                    <p>{{ v.description or "A magical moment captured in video." }}</p>
-                </div>
-                <div class="video-card-actions">
-                    <button type="button" class="btn-lightbox" onclick="openVideoLightbox('/media/videos/public/{{ v.path }}', {{ v.title|tojson }}, {{ (v.description or '')|tojson }})">
-                        🔍 Open HD Cinema Mode
-                    </button>
-                </div>
+                <h3>{{ v.title }}</h3>
+                <p>{{ v.description or "A magical moment captured in video." }}</p>
+                <div class="tap-hint">🎬 Tap to play full screen</div>
             </div>
         </article>
         {% endfor %}
